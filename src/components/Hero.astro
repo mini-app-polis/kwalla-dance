@@ -1,0 +1,43 @@
+---
+import { site } from "../data/site";
+import Koala from "./Koala.astro";
+---
+
+<section id="top" class="relative mx-auto grid max-w-5xl items-center gap-10 px-6 pb-14 pt-12 sm:px-8 md:grid-cols-[1.05fr_.95fr] md:pt-16">
+  <Koala spot="hero" class="right-4 top-2 h-12 w-12 text-ink" />
+
+  <div>
+    <p class="eyebrow mb-4">{site.eyebrow}</p>
+
+    <h1 class="mb-4 font-display text-hero font-extrabold text-ink">
+      Kristen<br />Wallace
+    </h1>
+
+    <p class="mb-7 max-w-lede text-lede text-muted">{site.lede}</p>
+
+    <div class="flex flex-wrap items-center gap-5">
+      <a href="#book" class="btn">Book a lesson</a>
+      <a href="#calendar" class="link-quiet">See where I'll be next</a>
+    </div>
+  </div>
+
+  <!--
+    TODO: replace with a real photo.
+
+    Meadow is a paper-based palette and it is unforgiving of stage lighting —
+    a dark ballroom shot punches a hole in the page. Daylight, studio, or
+    social-floor-with-ambient-light images only. See public/images/README.md.
+  -->
+  <div class="relative aspect-[4/5] overflow-hidden rounded bg-surface">
+    <img
+      src="/images/hero.jpg"
+      alt="TODO: describe this photo for screen readers"
+      class="h-full w-full object-cover"
+      loading="eager"
+      decoding="async"
+    />
+    <span class="pointer-events-none absolute inset-0 grid place-items-center bg-surface text-[11px] uppercase tracking-[0.14em] text-muted [img:not([src=''])~&]:hidden">
+      Photo placeholder
+    </span>
+  </div>
+</section>

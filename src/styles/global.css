@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Meadow — kristenwallace.com
+   Light-only. No dark mode: the palette is built around a paper base and
+   the value relationships do not survive inversion. */
+
+html {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-paper text-ink antialiased;
+}
+
+/* Koala opacity scale.
+   These are tuned per context, not a single global value — a flat opacity
+   either vanishes against paper or shouts against the sage band. The goal
+   is findable on a second look, invisible on the first. */
+:root {
+  --koala-hero: 0.06;  /* largest, so the lowest opacity */
+  --koala-band: 0.13;  /* on sage, needs more to read at all */
+  --koala-cal: 0.15;   /* clay-tinted, small */
+  --koala-foot: 0.20;  /* smallest, so the highest */
+}
+
+.koala {
+  @apply pointer-events-none absolute;
+  color: currentColor;
+}
+
+/* Type rhythm ------------------------------------------------------- */
+
+.eyebrow {
+  @apply flex items-center gap-2.5 font-semibold uppercase text-eyebrow text-clay;
+}
+
+/* The rule running off the end of an eyebrow encodes section start —
+   it is a structural marker, not decoration. Drop it if a section does
+   not actually begin a new part of the page. */
+.eyebrow::after {
+  content: "";
+  @apply h-px flex-1 bg-rule opacity-50;
+}
+
+/* Components -------------------------------------------------------- */
+
+.btn {
+  @apply inline-block rounded bg-clay px-6 py-3 text-sm font-semibold
+         text-clay-ink no-underline transition;
+}
+
+.btn:hover {
+  filter: brightness(1.07);
+  transform: translateY(-1px);
+}
+
+.link-quiet {
+  @apply border-b border-rule pb-0.5 text-sm text-muted no-underline transition-colors;
+}
+
+.link-quiet:hover {
+  @apply text-ink;
+}
+
+/* Full-bleed sage band. Sage is dominant by area here rather than by
+   being the page background — that is what keeps it from going pastel. */
+.band {
+  @apply bg-sage px-8 py-10 text-sage-ink;
+}
+
+/* Accessibility ----------------------------------------------------- */
+
+:focus-visible {
+  outline: 2px solid theme("colors.clay.DEFAULT");
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,42 @@
+---
+import { getUpcomingEvents, formatDateRange } from "../lib/calendar";
+import Koala from "./Koala.astro";
+
+const events = await getUpcomingEvents(6);
+const usingSeed = !import.meta.env.PUBLIC_CALENDAR_ICS_URL;
+---
+
+<section id="calendar" class="relative mx-auto max-w-5xl scroll-mt-20 px-6 py-12 sm:px-8">
+  <Koala spot="calendar" class="right-8 top-10 h-6 w-6 text-clay" />
+
+  <div class="mb-2 flex items-baseline justify-between gap-4">
+    <h2 class="text-eyebrow font-semibold uppercase text-muted">Where I'll be</h2>
+    <span class="text-[11.5px] text-muted opacity-75">
+      {usingSeed ? "TODO: connect calendar" : "Straight from my calendar"}
+    </span>
+  </div>
+
+  <div>
+    {events.map((e) => (
+      <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1.5 border-b border-line py-3.5 last:border-b-0">
+        <span class="w-[108px] shrink-0 text-[12px] font-semibold uppercase tracking-wide text-clay tabular-nums">
+          {formatDateRange(e)}
+        </span>
+        <span class="text-[14.5px] font-medium text-ink">{e.name}</span>
+        <span class="rounded bg-chip px-2 py-0.5 text-[10.5px] tracking-wide text-muted">
+          {e.tag}
+        </span>
+        {e.location && (
+          <span class="ml-auto text-[12.5px] text-muted">{e.location}</span>
+        )}
+      </div>
+    ))}
+
+    {events.length === 0 && (
+      <p class="py-6 text-[13.5px] text-muted">
+        Nothing on the calendar right now. The best way to catch me is to
+        <a href="#book" class="link-quiet ml-1">book a lesson</a>.
+      </p>
+    )}
+  </div>
+</section>

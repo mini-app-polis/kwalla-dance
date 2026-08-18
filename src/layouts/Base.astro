@@ -1,0 +1,66 @@
+---
+import { site } from "../data/site";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = site.name,
+  description = "West Coast Swing private lessons, event coaching, and video review in Minneapolis.",
+} = Astro.props;
+
+const origin = import.meta.env.PUBLIC_SITE_URL ?? site.url;
+const canonical = new URL(Astro.url.pathname, origin).href;
+
+// TODO: generate a real OG image once photos and type are settled.
+const ogImage = new URL("/og/default.png", origin).href;
+
+// TODO: typography is provisional. Bricolage Grotesque and Instrument Sans
+// were held constant across the palette studies as a control, not chosen for
+// this brief. Worth a real pass before launch — swap here and in
+// tailwind.config.mjs together.
+const fontsUrl =
+  "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="canonical" href={canonical} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href={fontsUrl} rel="stylesheet" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+
+  <body class="bg-paper text-ink">
+    <a
+      href="#top"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-clay focus:px-4 focus:py-2 focus:text-clay-ink"
+    >
+      Skip to content
+    </a>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,30 @@
+---
+import Base from "../layouts/Base.astro";
+import Nav from "../components/Nav.astro";
+import Hero from "../components/Hero.astro";
+import Lessons from "../components/Lessons.astro";
+import Calendar from "../components/Calendar.astro";
+import About from "../components/About.astro";
+import Booking from "../components/Booking.astro";
+import Footer from "../components/Footer.astro";
+
+/**
+ * One page, five sections, anchor navigation.
+ *
+ * Section order is a funnel, not a menu: who she is, what you can book, when
+ * she is around, why her, then the booking widget. Reordering these changes
+ * what the page argues, so do it deliberately.
+ */
+---
+
+<Base>
+  <Nav />
+  <main>
+    <Hero />
+    <Lessons />
+    <Calendar />
+    <About />
+    <Booking />
+  </main>
+  <Footer />
+</Base>

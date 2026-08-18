@@ -1,0 +1,78 @@
+---
+import { site } from "../data/site";
+
+/**
+ * Anchor nav for a single-page site. Sections are the whole site, so the
+ * active state is doing real work here — it is the only indication of where
+ * you are on the page.
+ */
+const sections = [
+  { href: "#lessons", label: "Lessons" },
+  { href: "#calendar", label: "Where I'll be" },
+  { href: "#about", label: "About" },
+  { href: "#book", label: "Book" },
+];
+---
+
+<header class="sticky top-0 z-40 border-b border-line bg-paper/85 backdrop-blur">
+  <nav class="mx-auto flex max-w-5xl items-baseline justify-between gap-4 px-6 py-4 sm:px-8">
+    <a href="#top" class="font-display text-[15px] font-semibold tracking-tight text-ink">
+      {site.name}
+    </a>
+
+    <div class="hidden gap-6 text-[13px] sm:flex">
+      {sections.map((s) => (
+        <a
+          href={s.href}
+          data-nav-link
+          class="text-muted transition-colors hover:text-ink"
+        >
+          {s.label}
+        </a>
+      ))}
+    </div>
+
+    <a href="#book" class="text-[13px] font-semibold text-clay sm:hidden">Book</a>
+  </nav>
+</header>
+
+<script is:inline>
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll("[data-nav-link]"));
+    if (!links.length || !("IntersectionObserver" in window)) return;
+
+    var byId = {};
+    links.forEach(function (a) {
+      byId[a.getAttribute("href").slice(1)] = a;
+    });
+
+    function clear() {
+      links.forEach(function (a) {
+        a.classList.remove("text-ink", "font-medium");
+        a.classList.add("text-muted");
+      });
+    }
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var link = byId[entry.target.id];
+          if (!link) return;
+          clear();
+          link.classList.remove("text-muted");
+          link.classList.add("text-ink", "font-medium");
+        });
+      },
+      // Trip when a section crosses the upper third, not when it merely
+      // touches the viewport — otherwise two sections are "active" at once
+      // on tall screens.
+      { rootMargin: "-33% 0px -60% 0px" }
+    );
+
+    Object.keys(byId).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+  })();
+</script>

@@ -1,0 +1,37 @@
+---
+/**
+ * A hidden koala.
+ *
+ * The whole point is that it is missable on a first read and findable on a
+ * second. Opacity is set by CSS custom property per placement (see
+ * global.css) because a single global value either vanishes against paper or
+ * shouts against the sage band.
+ *
+ * aria-hidden throughout: this is decoration and announcing "koala" to a
+ * screen reader in the middle of a booking flow would be noise.
+ */
+interface Props {
+  /** Which tuned opacity to use. */
+  spot: "hero" | "band" | "calendar" | "footer";
+  /** Tailwind positioning + sizing classes for this instance. */
+  class?: string;
+}
+
+const { spot, class: className = "" } = Astro.props;
+
+const opacity = {
+  hero: "var(--koala-hero)",
+  band: "var(--koala-band)",
+  calendar: "var(--koala-cal)",
+  footer: "var(--koala-foot)",
+}[spot];
+---
+
+<span class:list={["koala", className]} style={`opacity:${opacity}`} aria-hidden="true">
+  <svg viewBox="0 0 64 64" class="h-full w-full fill-current">
+    <circle cx="13" cy="22" r="11" />
+    <circle cx="51" cy="22" r="11" />
+    <ellipse cx="32" cy="34" rx="20" ry="19" />
+    <ellipse cx="32" cy="41" rx="6.5" ry="8" fill="currentColor" opacity="0.001" />
+  </svg>
+</span>

@@ -1,0 +1,11 @@
+name = "kristenwallace-com"
+compatibility_date = "2026-01-01"
+pages_build_output_dir = "dist"
+
+[vars]
+PUBLIC_SITE_URL = "https://kristenwallace.com"
+
+# TODO: paste the public iCloud calendar share URL here once Kristen creates
+# the calendar. Leave empty and the site falls back to the seed events in
+# src/data/site.ts — it will build and look correct either way.
+PUBLIC_CALENDAR_ICS_URL = ""

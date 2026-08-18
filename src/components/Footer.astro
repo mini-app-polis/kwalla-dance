@@ -1,0 +1,31 @@
+---
+import { site } from "../data/site";
+import Koala from "./Koala.astro";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="relative border-t border-line">
+  <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-6 py-7 sm:px-8">
+    <Koala spot="footer" class="left-8 top-1 h-5 w-5 text-muted" />
+
+    <p class="text-[11.5px] text-muted">
+      © {year} {site.name} · Minneapolis
+    </p>
+
+    {site.social.length > 0 && (
+      <div class="flex gap-5">
+        {site.social.map((s) => (
+          <a
+            href={s.href}
+            rel="me noreferrer"
+            target="_blank"
+            class="text-[12.5px] text-muted transition-colors hover:text-ink"
+          >
+            {s.label}
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</footer>

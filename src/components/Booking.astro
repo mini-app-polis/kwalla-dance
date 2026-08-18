@@ -1,0 +1,106 @@
+---
+import { site } from "../data/site";
+
+const cal = site.calUsername;
+---
+
+<!--
+  Cal.com inline embed.
+
+  Cal.com rather than Calendly: Calendly stopped accepting NEW iCloud Calendar
+  connections in August 2024, so it cannot read Kristen's Apple calendar.
+  Cal.com still can, via an app-specific password generated at appleid.apple.com.
+
+  No Turnstile / no bot gate in front of this. A verification step in front of a
+  dance student trying to book a lesson is pure friction, and Cal.com handles
+  its own spam.
+
+  SETUP (see TODO.md for the full checklist):
+    1. Kristen creates the Cal.com account — her account, her Apple ID.
+    2. Settings → Calendars → Apple Calendar → app-specific password.
+    3. Create event types with slugs matching `calSlug` in src/data/site.ts.
+    4. Set `calUsername` in src/data/site.ts.
+-->
+<section id="book" class="scroll-mt-20 border-t border-line">
+  <div class="mx-auto max-w-5xl px-6 py-14 sm:px-8">
+    <p class="eyebrow mb-4">Book</p>
+    <h2 class="mb-3 max-w-[20ch] font-display text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
+      Pick a time that's already open
+    </h2>
+    <p class="mb-8 max-w-prose text-lede text-muted">
+      <!-- TODO: Kristen's words. Worth saying what happens after booking —
+           where lessons are, what to bring, whether to come with a partner. -->
+      Times shown are live from my calendar, so there's no back-and-forth to
+      find a slot. You'll get a confirmation and a reminder automatically.
+    </p>
+
+    {cal ? (
+      <div
+        id="cal-embed"
+        class="min-h-[560px] overflow-hidden rounded border border-line bg-card"
+      />
+      <script is:inline define:vars={{ cal }}>
+        (function (C, A, L) {
+          let p = function (a, ar) { a.q.push(ar); };
+          let d = C.document;
+          C.Cal = C.Cal || function () {
+            let cal = C.Cal;
+            let ar = arguments;
+            if (!cal.loaded) {
+              cal.ns = {};
+              cal.q = cal.q || [];
+              d.head.appendChild(d.createElement("script")).src = A;
+              cal.loaded = true;
+            }
+            if (ar[0] === L) {
+              const api = function () { p(api, arguments); };
+              const namespace = ar[1];
+              api.q = api.q || [];
+              typeof namespace === "string"
+                ? (cal.ns[namespace] = api) && p(api, ar)
+                : p(cal, ar);
+              return;
+            }
+            p(cal, ar);
+          };
+        })(window, "https://app.cal.com/embed/embed.js", "init");
+
+        Cal("init", { origin: "https://cal.com" });
+        Cal("inline", {
+          elementOrSelector: "#cal-embed",
+          calLink: cal,
+          layout: "month_view",
+        });
+        Cal("ui", {
+          hideEventTypeDetails: false,
+          layout: "month_view",
+          // Meadow tokens, so the embed does not arrive looking like a
+          // third-party widget bolted onto the page.
+          cssVarsPerTheme: {
+            light: {
+              "cal-brand": "#A6522F",
+              "cal-text": "#2F362E",
+              "cal-text-emphasis": "#2F362E",
+              "cal-bg": "#FFFFFF",
+              "cal-bg-emphasis": "#E9E7DB",
+              "cal-border": "rgba(47,54,46,0.16)",
+            },
+          },
+        });
+      </script>
+    ) : (
+      <div class="rounded border border-dashed border-rule bg-surface p-8">
+        <p class="mb-2 text-[14px] font-semibold text-ink">
+          Booking embed not connected yet
+        </p>
+        <p class="mb-5 max-w-prose text-[13.5px] leading-relaxed text-muted">
+          Set <code class="rounded bg-chip px-1.5 py-0.5">calUsername</code> in
+          <code class="rounded bg-chip px-1.5 py-0.5">src/data/site.ts</code> and
+          this becomes a live calendar. Until then the page falls back to email
+          so it is never a dead end.
+        </p>
+        <a href={`mailto:${site.email}`} class="btn">Email to book</a>
+      </div>
+    )}
+  </div>
+</section>
