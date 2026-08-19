@@ -72,9 +72,8 @@ export const site = {
       "TODO: Competitive and teaching background — divisions, results, where she's taught.",
       "TODO: What she actually cares about in a lesson. This is the paragraph people decide on.",
     ],
-    // TODO: swap for a real photo. See public/images/README.md for what to shoot.
-    photo: "/images/portrait.jpg",
-    photoAlt: "TODO: describe the photo for screen readers",
+    photo: "/images/portrait.jpeg",
+    photoAlt: "Kristen Wallace, West Coast Swing instructor",
   },
 
   sessions: [
