@@ -1,13 +1,12 @@
 ---
 import { site } from "../data/site";
+
+/**
+ * Booking is a link out to Calendly, not an embed. The site never manages
+ * availability — Calendly owns the calendar, confirmations, and reminders.
+ */
 ---
 
-<!--
-  Calendly booking link.
-
-  Direct link to Calendly for booking lessons. No embed complications,
-  just a straightforward link to the scheduling page.
--->
 <section id="book" class="scroll-mt-20 border-t border-line">
   <div class="mx-auto max-w-5xl px-6 py-14 sm:px-8">
     <p class="eyebrow mb-4">Book</p>
@@ -15,15 +14,22 @@ import { site } from "../data/site";
       Pick a time that's already open
     </h2>
     <p class="mb-8 max-w-prose text-lede text-muted">
-      Book directly through Calendly to see my available times. You'll get a confirmation email with all the details.
+      Booking runs through Calendly, so there's no back-and-forth to find a
+      slot. Pick a time that works and you'll get a confirmation and a
+      reminder automatically.
     </p>
 
-    <div class="rounded border border-line bg-card p-8">
-      <p class="mb-5 max-w-prose text-lede text-ink">
-        Ready to book? Head over to Calendly to see my available times and pick what works for you.
-      </p>
-      <a href="https://calendly.com/kwallawcs/" target="_blank" rel="noopener noreferrer" class="btn">
-        Open Calendly
+    <div class="flex flex-wrap items-center gap-5">
+      <a
+        href={site.bookingUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn"
+      >
+        Book on Calendly
+      </a>
+      <a href={`mailto:${site.email}`} class="link-quiet">
+        Or email me with questions
       </a>
     </div>
   </div>

@@ -3,19 +3,15 @@
  *
  * If Kristen wants to change a word, a price, or a photo, this is the only
  * file she needs to open. Nothing else in src/ contains copy.
- *
- * Anything marked TODO is a placeholder written to be structurally correct
- * but factually invented. Replace before launch.
  */
 
 export type SessionType = {
   id: string;
   name: string;
   blurb: string;
+  /** Display price, e.g. "$95". Empty string = only duration is shown. */
   price: string;
   duration: string;
-  /** Cal.com event-type slug, e.g. "private-60". Empty = button disabled. */
-  calSlug: string;
 };
 
 export type SeedEvent = {
@@ -33,25 +29,26 @@ export type SeedEvent = {
   dateLabel?: string;
 };
 
+export type GalleryImage = {
+  src: string;
+  alt: string;
+};
+
 export const site = {
   name: "Kristen Wallace",
-  // TODO: confirm how she wants to be described. "Instructor" vs "coach" vs
-  // just the location line. This sits directly above her name in the hero.
   eyebrow: "West Coast Swing · Minneapolis",
 
   // TODO: replace with Kristen's own words. This is the single most important
   // paragraph on the site and it should sound like her, not like a template.
-  // Two or three sentences. What she teaches, who she teaches, and one
-  // specific thing that is true of her lessons and not of everyone else's.
   lede:
     "Private lessons in the Twin Cities, coaching at events, and video review " +
-    "for competitors. Booking runs straight off my calendar — if a slot looks " +
-    "open, it's open.",
+    "for competitors. Booking is one click away on my Calendly — if a slot " +
+    "looks open, it's open.",
 
   // TODO: confirm domain. Nothing depends on this except canonical/OG tags.
   url: "https://kristenwallace.com",
 
-  // TODO: real contact address, or delete and rely on the booking form.
+  // TODO: real contact address, or delete and rely on the booking link.
   email: "hello@kristenwallace.com",
 
   social: [
@@ -59,8 +56,15 @@ export const site = {
     // { label: "Instagram", href: "https://instagram.com/..." },
   ] as { label: string; href: string }[],
 
-  /** Cal.com username, e.g. "kristenwallace". Empty = booking is a mailto. */
-  calUsername: "", // TODO
+  /** All lesson booking happens here — the site never manages availability. */
+  bookingUrl: "https://calendly.com/kwallawcs/",
+
+  hero: {
+    photo: "/images/hero.jpeg",
+    photoAlt:
+      "Kristen mid-dance with a partner on a ballroom floor beneath a chandelier, " +
+      "leaning away in a stretched two-hand connection",
+  },
 
   about: {
     heading: "About",
@@ -73,8 +77,23 @@ export const site = {
       "TODO: What she actually cares about in a lesson. This is the paragraph people decide on.",
     ],
     photo: "/images/portrait.jpeg",
-    photoAlt: "Kristen Wallace, West Coast Swing instructor",
+    photoAlt: "Kristen Wallace smiling outdoors on a sunny sidewalk",
   },
+
+  gallery: [
+    {
+      src: "/images/performance-01.jpeg",
+      alt: "A dramatic dip on stage at The Open Swing Dance Championships",
+    },
+    {
+      src: "/images/performance-02.jpeg",
+      alt: "A supported lean mid-routine at Summer Spectacular 2026",
+    },
+    {
+      src: "/images/performance-03.jpeg",
+      alt: "Two dancers in a spotlight surrounded by a seated crowd at a West Coast Swing event",
+    },
+  ] satisfies GalleryImage[],
 
   sessions: [
     {
@@ -82,25 +101,22 @@ export const site = {
       name: "Private lesson",
       // TODO: confirm blurb and whether couples are priced differently.
       blurb: "60 minutes, one-on-one or as a couple.",
-      price: "TODO", // TODO: e.g. "$95"
+      price: "", // TODO: e.g. "$95" — empty shows duration only
       duration: "60 min",
-      calSlug: "private-60",
     },
     {
       id: "tuneup-30",
       name: "Tune-up",
       blurb: "30 minutes on one thing — a pattern, a habit, a routine section.",
-      price: "TODO",
+      price: "", // TODO
       duration: "30 min",
-      calSlug: "tuneup-30",
     },
     {
       id: "video-review",
       name: "Video review",
       blurb: "Send a comp video, get it back marked up with notes and drills.",
-      price: "TODO",
+      price: "", // TODO
       duration: "Remote",
-      calSlug: "video-review",
     },
   ] satisfies SessionType[],
 

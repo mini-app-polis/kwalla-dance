@@ -1,0 +1,29 @@
+---
+import { site } from "../data/site";
+
+/**
+ * Performance shots. Three across on desktop, stacked on mobile.
+ * These are stage-lit competition photos, so they sit in a dark strip
+ * of their own rather than fighting the paper background.
+ */
+---
+
+<section id="gallery" class="scroll-mt-20 border-t border-line">
+  <div class="mx-auto max-w-5xl px-6 py-14 sm:px-8">
+    <p class="eyebrow mb-6">On the floor</p>
+
+    <div class="grid gap-4 sm:grid-cols-3">
+      {site.gallery.map((img) => (
+        <div class="aspect-[3/2] overflow-hidden rounded bg-surface">
+          <img
+            src={img.src}
+            alt={img.alt}
+            class="h-full w-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
