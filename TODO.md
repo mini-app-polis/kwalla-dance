@@ -88,27 +88,36 @@ https://calendar.google.com/calendar/ical/<CALENDAR_ID>/public/basic.ics
 `@` is percent-encoded as `%40` there. The `newembed?src=…` link for the same
 calendar is the embed *view*, not a feed — don't paste that one in.
 
+**The list is live.** The page fetches `/api/calendar` in the browser, so an
+event Kristen adds shows up on the site within the cache window, with no
+rebuild and nothing for her to do. The copy baked into the HTML at build time
+is the fallback underneath that, for crawlers and no-JS visitors.
+
 - [ ] Confirm the calendar is world-readable: Google Calendar → Settings for
       my calendars → the calendar → **Access permissions → Make available to
-      public**. Until that is ticked the ICS URL 404s and every build falls
-      back to seed events. Everything on it becomes world-readable, so this
-      should stay a **separate** calendar, not her main one.
+      public**. Until that is ticked the ICS URL 404s and the site quietly
+      shows seed events instead. Everything on the calendar becomes
+      world-readable, so this should stay a **separate** calendar, not her
+      main one.
 - [ ] Confirm Kristen owns it, or can be made an owner. If it lives under
       someone else's Google account she can't change it without asking.
 - [ ] Recurring items (the weekly class) stay in `seedEvents` in `site.ts`.
       The parser deliberately does not expand `RRULE`, and Google emits a
       recurring event as a single VEVENT — it would otherwise render exactly
-      once, on its first occurrence.
+      once, on its first occurrence. Seed items are pinned above feed events.
 - [ ] Tell her the naming convention. The Teaching / Competing / DJing tag is
-      inferred from the event title (see `inferTag` in `src/lib/calendar.ts`),
-      so putting "teaching" or "comp" anywhere in the name is enough.
-      Unmatched titles fall back to "Attending" rather than guessing.
-- [ ] Once it's public, run `npm run build` and check the log for `[calendar]`
-      warnings — silence means the feed fetched and parsed.
+      inferred from the event title (see `inferTag` in `src/lib/ics.ts`), so
+      putting "teaching" or "comp" anywhere in the name is enough. Unmatched
+      titles fall back to "Attending" rather than guessing.
+- [ ] Once it's public, verify both halves:
+      `npm run build` — silence from `[calendar]` in the log means the
+      build-time fetch worked; then hit `/api/calendar` on the deployed site
+      and confirm the JSON says `"status": "live"` rather than `"seed"`.
 
-**Caching caveat:** Google serves the public ICS from cache, so it can lag
-behind what she sees in the Google Calendar UI. Fine for announcing an event
-weekend. Not fine for anything same-day.
+**Caching caveat:** Google serves the public ICS from cache, and the endpoint
+adds up to 15 minutes of its own (`EDGE_TTL_SECONDS` in
+`functions/api/calendar.ts`). Fine for announcing an event weekend. Still not
+instant, so not the thing to rely on for a same-day change.
 
 ---
 
@@ -119,12 +128,15 @@ weekend. Not fine for anything same-day.
 - [ ] Cloudflare Pages → Connect to Git → build command `npm run build`,
       output directory `dist`.
 - [ ] Point the domain. Registrar should be in her name.
-- [ ] Set up the scheduled rebuild so calendar changes appear without a push:
-      Cloudflare Pages → Settings → Builds & deployments → Deploy hooks →
-      create one, then add the URL as a repo secret named
-      `CLOUDFLARE_DEPLOY_HOOK`. The workflow in
-      `.github/workflows/rebuild.yml` is already written and will start
-      working the moment that secret exists.
+- [ ] Nothing to configure for `/functions` — Cloudflare Pages compiles it
+      automatically and routes `/api/calendar` to it. Confirm the route
+      answers on the first deploy.
+- [ ] Optional now: the daily rebuild. Calendar changes no longer need it —
+      they arrive live — so it only keeps the baked fallback in the HTML from
+      drifting. Cloudflare Pages → Settings → Builds & deployments → Deploy
+      hooks → create one, then add the URL as a repo secret named
+      `CLOUDFLARE_DEPLOY_HOOK`. `.github/workflows/rebuild.yml` is already
+      written and stays inert until that secret exists.
 
 ---
 

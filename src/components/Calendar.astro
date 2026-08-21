@@ -1,7 +1,15 @@
 ---
-import { getUpcomingEvents, formatDateRange } from "../lib/calendar";
+import { getUpcomingEvents } from "../lib/calendar";
 import Koala from "./Koala.astro";
 
+/**
+ * Renders twice: once here at build time so the HTML ships with events in it,
+ * then again in the browser from /api/calendar so a new event on Kristen's
+ * calendar appears without a rebuild.
+ *
+ * The markup below and the markup the script builds must stay in step. They
+ * sit side by side in this one file precisely so that is easy to notice.
+ */
 const events = await getUpcomingEvents(6);
 const usingSeed = !import.meta.env.PUBLIC_CALENDAR_ICS_URL;
 ---
@@ -16,11 +24,11 @@ const usingSeed = !import.meta.env.PUBLIC_CALENDAR_ICS_URL;
     </span>
   </div>
 
-  <div>
+  <div data-calendar-list>
     {events.map((e) => (
       <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1.5 border-b border-line py-3.5 last:border-b-0">
         <span class="w-[108px] shrink-0 text-[12px] font-semibold uppercase tracking-wide text-clay tabular-nums">
-          {formatDateRange(e)}
+          {e.dateLabel}
         </span>
         <span class="text-[14.5px] font-medium text-ink">{e.name}</span>
         <span class="rounded bg-chip px-2 py-0.5 text-[10.5px] tracking-wide text-muted">
@@ -40,3 +48,99 @@ const usingSeed = !import.meta.env.PUBLIC_CALENDAR_ICS_URL;
     )}
   </div>
 </section>
+
+<script>
+  /**
+   * Replaces the baked-in list with a live one.
+   *
+   * Everything here is best-effort. If the endpoint is missing (astro dev),
+   * slow, or erroring, we return early and the server-rendered list simply
+   * stays — which is why there is no spinner and no error state to design. The
+   * visitor never sees a worse page than the one that already painted.
+   *
+   * The endpoint hands back rows that are already formatted, so this file needs
+   * no date logic and no copy of the ICS parser.
+   */
+  type Row = {
+    dateLabel: string;
+    name: string;
+    tag: string;
+    location: string;
+  };
+
+  const ROW_CLASS =
+    "flex flex-wrap items-baseline gap-x-4 gap-y-1.5 border-b border-line py-3.5 last:border-b-0";
+  const DATE_CLASS =
+    "w-[108px] shrink-0 text-[12px] font-semibold uppercase tracking-wide text-clay tabular-nums";
+  const NAME_CLASS = "text-[14.5px] font-medium text-ink";
+  const TAG_CLASS =
+    "rounded bg-chip px-2 py-0.5 text-[10.5px] tracking-wide text-muted";
+  const LOCATION_CLASS = "ml-auto text-[12.5px] text-muted";
+  const EMPTY_CLASS = "py-6 text-[13.5px] text-muted";
+
+  function span(className: string, text: string): HTMLSpanElement {
+    const el = document.createElement("span");
+    el.className = className;
+    // textContent, never innerHTML — event titles are typed by a human into a
+    // calendar app and arrive here unescaped.
+    el.textContent = text;
+    return el;
+  }
+
+  function renderRow(row: Row): HTMLDivElement {
+    const wrapper = document.createElement("div");
+    wrapper.className = ROW_CLASS;
+    wrapper.append(
+      span(DATE_CLASS, row.dateLabel),
+      span(NAME_CLASS, row.name),
+      span(TAG_CLASS, row.tag),
+    );
+    if (row.location) wrapper.append(span(LOCATION_CLASS, row.location));
+    return wrapper;
+  }
+
+  function renderEmpty(): HTMLParagraphElement {
+    const p = document.createElement("p");
+    p.className = EMPTY_CLASS;
+    p.textContent =
+      "Nothing on the calendar right now. The best way to catch me is to ";
+    const link = document.createElement("a");
+    link.href = "#book";
+    link.className = "link-quiet ml-1";
+    link.textContent = "book a lesson";
+    p.append(link, document.createTextNode("."));
+    return p;
+  }
+
+  async function refresh(): Promise<void> {
+    const list = document.querySelector<HTMLElement>("[data-calendar-list]");
+    if (!list) return;
+
+    let payload: { status?: string; events?: Row[] };
+    try {
+      const res = await fetch("/api/calendar", {
+        headers: { Accept: "application/json" },
+      });
+      if (!res.ok) return;
+      payload = await res.json();
+    } catch {
+      return; // Offline, blocked, or no endpoint. Keep what is on screen.
+    }
+
+    // Only overwrite with a genuinely live answer. If the endpoint fell back to
+    // seed events, the HTML already shows those — repainting would be churn.
+    if (payload.status !== "live" || !Array.isArray(payload.events)) return;
+
+    const rows = payload.events;
+    const next = document.createDocumentFragment();
+    if (rows.length === 0) {
+      next.append(renderEmpty());
+    } else {
+      for (const row of rows) next.append(renderRow(row));
+    }
+
+    list.replaceChildren(next);
+  }
+
+  refresh();
+</script>

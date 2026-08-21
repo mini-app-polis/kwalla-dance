@@ -23,7 +23,10 @@ export type SeedEvent = {
   /** Short label: Teaching, Competing, Drop-in, DJing... */
   tag: string;
   location: string;
-  /** Recurring items the ICS parser cannot expand. See lib/calendar.ts. */
+  /**
+   * Recurring items the ICS parser cannot expand — see lib/ics.ts. These are
+   * pinned above anything coming from the feed.
+   */
   recurring?: boolean;
   /** Free-text override for the date column, e.g. "Tuesdays". */
   dateLabel?: string;
@@ -121,10 +124,10 @@ export const site = {
   ] satisfies SessionType[],
 
   /**
-   * Fallback events, used when PUBLIC_CALENDAR_ICS_URL is empty or the fetch
-   * fails at build time. Also the right home for recurring items — the ICS
-   * parser deliberately does not expand RRULE, so a weekly class belongs here
-   * rather than on the synced calendar.
+   * Fallback events, used whenever the Google Calendar feed is empty or
+   * unreachable — at build time and at request time both. Also the right home
+   * for recurring items: the ICS parser deliberately does not expand RRULE, so
+   * a weekly class belongs here rather than on the synced calendar.
    */
   seedEvents: [
     {
