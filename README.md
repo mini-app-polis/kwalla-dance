@@ -19,7 +19,8 @@ Node 20+.
 ```
 src/data/site.ts        All copy, prices, and seed events. The only file
                         you need to open to change what the page says.
-src/lib/calendar.ts     Fetches and parses Kristen's public iCloud feed.
+src/lib/calendar.ts     Fetches and parses Kristen's public Google Calendar
+                        iCal feed.
 src/components/         One component per page section.
 src/styles/global.css   Base styles + the koala opacity scale.
 tailwind.config.mjs     The Meadow palette. Read the header comment before
@@ -30,13 +31,20 @@ TODO.md                 Launch checklist.
 ## Architecture, in one paragraph
 
 Static Astro site on Cloudflare Pages. No database, no API, no server
-runtime. Booking is a Cal.com embed; Cal.com owns availability and writes
-bookings back to Kristen's Apple Calendar. The "Where I'll be" list is
-fetched from a public iCloud `.ics` feed **at build time** and baked into the
-HTML, with a scheduled deploy hook to pick up changes. If the feed is
-unreachable the page falls back to seed events in `site.ts` and still builds
-correctly — a calendar outage should never take down a page whose actual job
-is the booking button.
+runtime. Booking is a link out to Calendly, which owns availability,
+confirmations, and reminders; the site never manages any of it. The "Where
+I'll be" list is fetched from the public iCal feed of a Google Calendar **at
+build time** and baked into the HTML, with a scheduled deploy hook to pick up
+changes. If the feed is unreachable the page falls back to seed events in
+`site.ts` and still builds correctly — a calendar outage should never take
+down a page whose actual job is the booking button.
+
+The calendar is Google, not iCloud. The feed URL is the "Public address in
+iCal format" from **Settings for my calendars → Integrate calendar**, and it
+only resolves while that calendar's Access permissions include **Make
+available to public**. Turn that off and every build silently falls back to
+seed events — `calendar.ts` logs a specific warning for the 404 so it is
+findable in the build log.
 
 ## Two things that will bite you
 

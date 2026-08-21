@@ -1,5 +1,11 @@
 /**
- * Reads Kristen's public iCloud calendar at build time.
+ * Reads Kristen's public Google Calendar at build time.
+ *
+ * The feed is that calendar's "Public address in iCal format": Google Calendar
+ * → Settings for my calendars → <calendar> → Integrate calendar. It only
+ * resolves once the calendar is set to "Make available to public" under Access
+ * permissions — without that Google answers 404 and the page falls back to the
+ * seed events.
  *
  * Deliberately dependency-free. The ICS surface we actually need is small —
  * DTSTART, DTEND, SUMMARY, LOCATION — and pulling in a full iCalendar library
@@ -8,16 +14,19 @@
  *
  * KNOWN LIMITATIONS, all intentional:
  *
- *  - RRULE is not expanded. A weekly class defined as a recurring event will
- *    render once, on its first occurrence, which is wrong. Recurring items go
- *    in `seedEvents` in src/data/site.ts instead.
+ *  - RRULE is not expanded. Google emits a recurring event as one VEVENT
+ *    carrying an RRULE, so a weekly class would render once, on its first
+ *    occurrence, which is wrong. Recurring items go in `seedEvents` in
+ *    src/data/site.ts instead.
  *  - TZID is read but not resolved against a timezone database. Times are
  *    treated as wall-clock local. Since this list only ever displays dates,
  *    not times, that is not currently observable — but it would be if the
  *    design ever shows "7:00 PM".
- *  - iCloud public feeds are cached hard on Apple's side and can lag several
- *    hours behind what Kristen sees in her Calendar app. Fine for announcing
- *    an event weekend. Not fine for anything same-day.
+ *  - Google serves the public ICS from cache and it can lag behind what
+ *    Kristen sees in the Google Calendar UI. Fine for announcing an event
+ *    weekend. Not fine for anything same-day.
+ *  - The feed carries past events too. Filtering to upcoming happens in
+ *    getUpcomingEvents, not at fetch time.
  */
 
 import { site, type SeedEvent } from "../data/site";
@@ -33,7 +42,12 @@ export type CalendarEvent = {
   recurring?: boolean;
 };
 
-/** iCloud hands out webcal:// links. fetch() does not know that scheme. */
+/**
+ * Google's Integrate-calendar panel gives an https:// .ics address, but the
+ * same URL is handed around in webcal:// form by calendar apps and by Google's
+ * own "subscribe" links. fetch() does not know that scheme, so normalise it
+ * rather than making whoever pastes the URL care which form they copied.
+ */
 function normaliseUrl(raw: string): string {
   return raw.trim().replace(/^webcal:\/\//i, "https://");
 }
@@ -66,7 +80,7 @@ function unescapeText(value: string): string {
 }
 
 /**
- * Handles the three DTSTART/DTEND forms iCloud emits:
+ * Handles the three DTSTART/DTEND forms Google emits:
  *   DTSTART;VALUE=DATE:20260828                 (all-day)
  *   DTSTART:20260828T190000Z                    (UTC)
  *   DTSTART;TZID=America/Chicago:20260828T190000 (local wall time)
@@ -94,7 +108,7 @@ function parseDate(value: string, params: string): { date: Date; allDay: boolean
 
 /**
  * Infers the Teaching / Competing / DJing label from the event title, since
- * iCloud has nowhere to put a structured tag.
+ * the ICS feed has nowhere to put a structured tag.
  *
  * Kristen controls this by how she names the event: putting "teaching" or
  * "comp" anywhere in the title is enough. Anything unmatched falls back to a
@@ -216,6 +230,14 @@ export async function getUpcomingEvents(limit = 6): Promise<CalendarEvent[]> {
       });
       if (res.ok) {
         fetched = parseIcs(await res.text());
+      } else if (res.status === 404) {
+        // Google's 404 here almost always means the calendar's Access
+        // permissions no longer include "Make available to public", not that
+        // the URL is wrong. Say so, because the two look identical otherwise.
+        console.warn(
+          "[calendar] Google returned 404 — the calendar is probably no longer " +
+            "public. Using seed events.",
+        );
       } else {
         console.warn(`[calendar] feed returned ${res.status}; using seed events`);
       }

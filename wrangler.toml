@@ -5,7 +5,8 @@ pages_build_output_dir = "dist"
 [vars]
 PUBLIC_SITE_URL = "https://kristenwallace.com"
 
-# TODO: paste the public iCloud calendar share URL here once Kristen creates
-# the calendar. Leave empty and the site falls back to the seed events in
-# src/data/site.ts — it will build and look correct either way.
-PUBLIC_CALENDAR_ICS_URL = ""
+# Public iCal address for the "Where I'll be" Google Calendar. Requires that
+# calendar's Access permissions to include "Make available to public" — if that
+# is ever switched off, Google 404s and the site falls back to the seed events
+# in src/data/site.ts. It builds and looks correct either way.
+PUBLIC_CALENDAR_ICS_URL = "https://calendar.google.com/calendar/ical/a9c43a7a21e0a15400cbff307bc40013b6816ca29c7433b6c454b512bfdf7538%40group.calendar.google.com/public/basic.ics"

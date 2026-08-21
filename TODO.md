@@ -45,51 +45,70 @@ variant rather than the photos being forced to work.
 
 ---
 
-## 3. Booking — Cal.com
+## 3. Booking — Calendly
 
-Cal.com rather than Calendly: Calendly stopped accepting new iCloud Calendar
-connections in August 2024, so it cannot read an Apple calendar at all.
+This section used to argue for Cal.com over Calendly on one ground: Calendly
+stopped accepting new iCloud Calendar connections in August 2024, so it could
+not read an Apple calendar at all. That constraint is gone — the calendar is
+Google now, which Calendly reads natively. `src/components/Booking.astro`
+already links out to Calendly (`bookingUrl` in `site.ts`), so this is the
+option in the code as well.
 
-- [ ] Kristen creates the Cal.com account. **Her account, her Apple ID, her
-      app-specific password.** Do not set this up under someone else's login —
-      it is her booking system and she needs to be able to change it without
-      asking anyone.
-- [ ] Connect Apple Calendar: Settings → Calendars → Add → Apple Calendar,
-      then an app-specific password from appleid.apple.com. Worth telling her
-      up front that this stores a credential with Cal.com, and that it is
-      revocable from her Apple ID page at any time.
-- [ ] Create event types with slugs matching `calSlug` in `site.ts`:
-      `private-60`, `tuneup-30`, `video-review`.
-- [ ] Set `calUsername` in `site.ts`. Until it is set, the booking section
-      falls back to a mailto link rather than rendering an empty widget.
+- [ ] Kristen creates the Calendly account under **her own Google login**. Do
+      not set it up under someone else's — it is her booking system and she
+      needs to be able to change it without asking anyone.
+- [ ] Connect the Google account so Calendly reads her real availability.
+      Point it at her *personal* calendar for conflict checking, not the
+      public "Where I'll be" calendar — those are two different jobs.
+- [ ] Create event types matching the sessions in `site.ts`: `private-60`,
+      `tuneup-30`, `video-review`.
+- [ ] Confirm `bookingUrl` in `site.ts` (currently
+      `https://calendly.com/kwallawcs/`) is the right landing page — a bare
+      profile URL shows all event types, which is probably what we want.
 - [ ] Set availability windows.
 - [ ] **Date overrides for event weekends.** This is the feature that
       actually replaces the DM back-and-forth: open a bookable block only
       during an event, only in the hours she is not teaching workshops.
 - [ ] Decide about payment. Recommend *not* solving it in v1 — Venmo or
-      in person, and booking is just booking. Cal.com has a Stripe app if she
-      wants it later; check whether it's on the free tier before promising.
+      in person, and booking is just booking. Calendly has Stripe/PayPal
+      integrations if she wants it later; check the tier before promising.
 
 ---
 
-## 4. Calendar feed
+## 4. Calendar feed — Google Calendar
 
-- [ ] Kristen creates a **separate** iCloud calendar for public events —
-      not her main one. Everything on it becomes world-readable.
-- [ ] Make it public: Calendar app → right-click the calendar → Share
-      Calendar → Public Calendar → copy the link.
-- [ ] Paste into `PUBLIC_CALENDAR_ICS_URL` in `wrangler.toml`.
+The source is a **Google Calendar**, not an iCloud one. Calendar ID
+`a9c43a7a…@group.calendar.google.com`. The ICS address is already wired into
+`PUBLIC_CALENDAR_ICS_URL` in `wrangler.toml` and `.env.example`:
+
+```
+https://calendar.google.com/calendar/ical/<CALENDAR_ID>/public/basic.ics
+```
+
+`@` is percent-encoded as `%40` there. The `newembed?src=…` link for the same
+calendar is the embed *view*, not a feed — don't paste that one in.
+
+- [ ] Confirm the calendar is world-readable: Google Calendar → Settings for
+      my calendars → the calendar → **Access permissions → Make available to
+      public**. Until that is ticked the ICS URL 404s and every build falls
+      back to seed events. Everything on it becomes world-readable, so this
+      should stay a **separate** calendar, not her main one.
+- [ ] Confirm Kristen owns it, or can be made an owner. If it lives under
+      someone else's Google account she can't change it without asking.
 - [ ] Recurring items (the weekly class) stay in `seedEvents` in `site.ts`.
-      The parser deliberately does not expand `RRULE` — a recurring event
-      would otherwise render exactly once, on its first occurrence.
+      The parser deliberately does not expand `RRULE`, and Google emits a
+      recurring event as a single VEVENT — it would otherwise render exactly
+      once, on its first occurrence.
 - [ ] Tell her the naming convention. The Teaching / Competing / DJing tag is
       inferred from the event title (see `inferTag` in `src/lib/calendar.ts`),
       so putting "teaching" or "comp" anywhere in the name is enough.
       Unmatched titles fall back to "Attending" rather than guessing.
+- [ ] Once it's public, run `npm run build` and check the log for `[calendar]`
+      warnings — silence means the feed fetched and parsed.
 
-**Caching caveat:** iCloud public feeds are cached hard on Apple's side and
-can lag several hours behind what she sees in her Calendar app. Fine for
-announcing an event weekend. Not fine for anything same-day.
+**Caching caveat:** Google serves the public ICS from cache, so it can lag
+behind what she sees in the Google Calendar UI. Fine for announcing an event
+weekend. Not fine for anything same-day.
 
 ---
 
