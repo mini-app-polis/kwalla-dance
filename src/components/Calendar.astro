@@ -10,8 +10,11 @@ import Koala from "./Koala.astro";
  * The markup below and the markup the script builds must stay in step. They
  * sit side by side in this one file precisely so that is easy to notice.
  */
-const events = await getUpcomingEvents(6);
-const usingSeed = !import.meta.env.PUBLIC_CALENDAR_ICS_URL;
+const { status, events } = await getUpcomingEvents(6);
+
+// Reflects whether the feed actually answered, not merely whether a URL is
+// configured. A URL that 404s must not claim the list came off her calendar.
+const usingSeed = status !== "live";
 ---
 
 <section id="calendar" class="relative mx-auto max-w-5xl scroll-mt-20 px-6 py-12 sm:px-8">

@@ -124,35 +124,28 @@ export const site = {
   ] satisfies SessionType[],
 
   /**
-   * Fallback events, used whenever the Google Calendar feed is empty or
-   * unreachable — at build time and at request time both. Also the right home
-   * for recurring items: the ICS parser deliberately does not expand RRULE, so
-   * a weekly class belongs here rather than on the synced calendar.
+   * Hand-written entries, merged with whatever comes off the Google Calendar.
+   *
+   * Empty on purpose. The calendar is the source of truth for "Where I'll be",
+   * so anything listed here shows up on the live site whether or not the feed
+   * is working — which is exactly how a placeholder ends up shipping. Add an
+   * entry only when you mean it to be permanent.
+   *
+   * Two things this is still for:
+   *
+   *  - Recurring items. `recurring: true` pins an entry above the feed events
+   *    and lets you write a free-text date ("Tuesdays"). The ICS parser does
+   *    not expand RRULE, so a weekly class defined on the calendar will not
+   *    repeat here — see the note in README.md.
+   *  - A fallback list, shown if the feed is ever unreachable. With this array
+   *    empty, an outage shows the "nothing on the calendar right now" copy in
+   *    Calendar.astro instead, which is the honest answer.
+   *
+   * Example:
+   *   { start: "2026-09-25", end: "2026-09-28", name: "Autumn Swing Classic",
+   *     tag: "Competing", location: "Chicago, IL" },
    */
-  seedEvents: [
-    {
-      start: "2026-08-28",
-      end: "2026-08-31",
-      name: "TODO: event name",
-      tag: "Teaching",
-      location: "Minneapolis, MN",
-    },
-    {
-      start: "2026-09-25",
-      end: "2026-09-28",
-      name: "TODO: event name",
-      tag: "Competing",
-      location: "TODO",
-    },
-    {
-      start: "2026-01-01",
-      name: "TODO: weekly class name",
-      tag: "Drop-in",
-      location: "TODO: venue",
-      recurring: true,
-      dateLabel: "Tuesdays",
-    },
-  ] satisfies SeedEvent[],
+  seedEvents: [] satisfies SeedEvent[],
 
   /**
    * Koala placements. Four is the right number — enough that finding one

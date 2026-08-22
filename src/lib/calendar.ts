@@ -31,11 +31,21 @@ export type { CalendarEvent, DisplayEvent } from "./ics";
 export { formatDateRange } from "./ics";
 
 /**
- * Returns the events to bake into the HTML. Never throws — a failed fetch, an
- * unreachable feed, or malformed ICS all degrade to the seed list, because a
- * calendar outage should not fail a build whose real job is the booking button.
+ * Returns the events to bake into the HTML, plus whether they actually came
+ * from the calendar.
+ *
+ * `status` is the honest answer to "did the feed work", and the component uses
+ * it for the little label in the section header. Do not infer that from the
+ * presence of PUBLIC_CALENDAR_ICS_URL — a configured URL that 404s would
+ * happily claim the list was straight from her calendar when it was not.
+ *
+ * Never throws. A failed fetch, an unreachable feed, or malformed ICS all
+ * degrade to the seed list, because a calendar outage should not fail a build
+ * whose real job is the booking button.
  */
-export async function getUpcomingEvents(limit = 6): Promise<DisplayEvent[]> {
+export async function getUpcomingEvents(
+  limit = 6,
+): Promise<{ status: "live" | "seed"; events: DisplayEvent[] }> {
   const feedUrl = import.meta.env.PUBLIC_CALENDAR_ICS_URL;
   let icsText: string | null = null;
 
@@ -60,7 +70,18 @@ export async function getUpcomingEvents(limit = 6): Promise<DisplayEvent[]> {
     } catch (err) {
       console.warn("[calendar] fetch failed; using seed events:", err);
     }
+  } else {
+    // The single most common local symptom is a page full of seed events with
+    // no explanation. Astro reads .env, never .env.example, so a fresh clone
+    // has no feed URL at all until someone copies one across.
+    console.warn(
+      "[calendar] PUBLIC_CALENDAR_ICS_URL is not set — copy .env.example to " +
+        ".env for local dev. Using seed events.",
+    );
   }
 
-  return buildEventList(icsText, site.seedEvents, limit);
+  return {
+    status: icsText ? "live" : "seed",
+    events: buildEventList(icsText, site.seedEvents, limit),
+  };
 }

@@ -248,8 +248,15 @@ export function formatDateRange(event: CalendarEvent): string {
  * Assembles the rendered list: recurring seed items first, then upcoming
  * events from the feed in date order.
  *
+ * Note that recurring seeds are pinned unconditionally — they render whether
+ * or not the feed worked. That is what makes them useful for a standing weekly
+ * class, and also what makes a half-written one a placeholder that ships. See
+ * the note on `seedEvents` in src/data/site.ts.
+ *
  * `icsText` null or unparseable falls back to the one-off seed events, so a
  * calendar outage degrades to a correct-looking page rather than an empty one.
+ * With no seeds configured at all it degrades to an empty list, and
+ * Calendar.astro renders its "nothing on the calendar right now" copy.
  *
  * Both the build and the live endpoint call this, which is the whole point —
  * the list the browser swaps in is assembled by the same code that produced
