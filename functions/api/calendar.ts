@@ -28,15 +28,30 @@ type Env = {
 };
 
 /**
- * How long the edge may serve a stored copy. Google caches the public ICS on
- * its own side anyway, so polling harder than this mostly re-fetches an
- * identical body. Fifteen minutes keeps the site comfortably fresh for
- * announcing an event weekend without hammering anyone.
+ * How long Cloudflare's edge may serve a stored copy before re-fetching from
+ * Google. This is the only cache that should exist here, and it is what keeps
+ * a traffic spike from turning into a fetch per visitor.
+ *
+ * A minute is short enough that "add the event, reload the page" behaves the
+ * way anyone would expect, and long enough that a busy day costs Google sixty
+ * requests an hour rather than thousands.
  */
-const EDGE_TTL_SECONDS = 900;
+const EDGE_TTL_SECONDS = 60;
 
-/** Shorter, so a visitor who leaves a tab open does not sit on a stale list. */
-const BROWSER_TTL_SECONDS = 300;
+/**
+ * Zero, deliberately — do NOT raise this.
+ *
+ * Any non-zero max-age lets the *browser* answer from its own HTTP cache
+ * without asking us, and a reload does not bypass it. Measured at max-age=300:
+ * four page loads produced one request. The reader most likely to reload is
+ * Kristen, checking whether the event she just added showed up; she would have
+ * seen a stale list and concluded the site was broken.
+ *
+ * With max-age=0 every page load reaches the edge, and the edge answers from
+ * EDGE_TTL_SECONDS above. Freshness is then something we control here rather
+ * than something scattered across visitors' browser caches.
+ */
+const BROWSER_TTL_SECONDS = 0;
 
 export async function onRequestGet(context: {
   request: Request;
@@ -89,8 +104,8 @@ export async function onRequestGet(context: {
     },
   );
 
-  // Only store a genuinely live answer. Caching the seed fallback for fifteen
-  // minutes would turn a momentary blip at Google into a visible outage.
+  // Only store a genuinely live answer. Caching the seed fallback would turn a
+  // momentary blip at Google into an outage that outlasts it.
   if (cache && status === "live") {
     context.waitUntil?.(cache.put(cacheKey, response.clone()));
   }

@@ -66,6 +66,14 @@ The function exists for exactly one reason: Google's `.ics` endpoint sends no
 CORS headers, so the page cannot fetch the feed directly. Everything else about
 the site stayed static.
 
+**Caching lives in exactly one place**, and it should stay that way. The
+endpoint sends `max-age=0, s-maxage=60`: browsers must ask every time, and
+Cloudflare's edge answers from a copy at most a minute old. Giving the browser
+a non-zero `max-age` is tempting and wrong — a reload does *not* bypass the
+browser's HTTP cache, so someone who just added an event and refreshed would
+sit looking at a stale list. Tune freshness via `EDGE_TTL_SECONDS`, never
+`BROWSER_TTL_SECONDS`.
+
 The calendar is Google, not iCloud. The feed URL is the "Public address in
 iCal format" from **Settings for my calendars → Integrate calendar**, and it
 only resolves while that calendar's Access permissions include **Make

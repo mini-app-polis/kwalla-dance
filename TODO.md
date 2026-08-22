@@ -114,10 +114,11 @@ is the fallback underneath that, for crawlers and no-JS visitors.
       build-time fetch worked; then hit `/api/calendar` on the deployed site
       and confirm the JSON says `"status": "live"` rather than `"seed"`.
 
-**Caching caveat:** Google serves the public ICS from cache, and the endpoint
-adds up to 15 minutes of its own (`EDGE_TTL_SECONDS` in
-`functions/api/calendar.ts`). Fine for announcing an event weekend. Still not
-instant, so not the thing to rely on for a same-day change.
+**Caching caveat:** the endpoint's own edge cache is 60s (`EDGE_TTL_SECONDS`
+in `functions/api/calendar.ts`), so a reload a minute after she adds something
+will show it. The floor underneath that is Google's, not ours: Google serves
+the public ICS from its own cache and can lag by longer. Good enough to
+announce an event weekend; do not promise her same-day accuracy.
 
 ---
 
