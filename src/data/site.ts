@@ -40,16 +40,29 @@ export type GalleryImage = {
   alt: string;
 };
 
+/**
+ * Where she is based. Austin is home; the travelling is the other half of the
+ * story, which is why it is a second string rather than baked into `home` —
+ * the eyebrow needs the short form, prose needs the long one.
+ *
+ * Defined here and used everywhere (eyebrow, footer, meta description) so a
+ * move is a one-line change instead of a hunt through components.
+ */
+const home = "Austin, TX";
+const reach = "travelling to events year-round";
+
 export const site = {
   name: "Kristen Wallace",
-  eyebrow: "West Coast Swing · Minneapolis",
+  home,
+  reach,
+  eyebrow: `West Coast Swing · ${home}`,
 
   // TODO: replace with Kristen's own words. This is the single most important
   // paragraph on the site and it should sound like her, not like a template.
   lede:
-    "Private lessons in the Twin Cities, coaching at events, and video review " +
-    "for competitors. Booking is one click away on my Calendly — if a slot " +
-    "looks open, it's open.",
+    "Private lessons in Austin, coaching at events wherever the dancing takes " +
+    "me, and video review for competitors. Booking is one click away on my " +
+    "Calendly — if a slot looks open, it's open.",
 
   // TODO: confirm domain. Nothing depends on this except canonical/OG tags.
   url: "https://kristenwallace.com",

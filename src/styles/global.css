@@ -18,11 +18,15 @@ body {
    These are tuned per context, not a single global value — a flat opacity
    either vanishes against paper or shouts against the sage band. The goal
    is findable on a second look, invisible on the first. */
+/* Nudged up slightly when the koala gained a face: the eyes and nose are
+   holes, and a hole needs the body around it to be readable before it reads
+   as a feature rather than a blur. Still under the threshold where any of
+   these announce themselves. */
 :root {
-  --koala-hero: 0.06;  /* largest, so the lowest opacity */
-  --koala-band: 0.13;  /* on sage, needs more to read at all */
-  --koala-cal: 0.15;   /* clay-tinted, small */
-  --koala-foot: 0.20;  /* smallest, so the highest */
+  --koala-hero: 0.08;  /* largest, so the lowest opacity */
+  --koala-band: 0.16;  /* on sage, needs more to read at all */
+  --koala-cal: 0.18;   /* clay-tinted, small */
+  --koala-foot: 0.24;  /* smallest, so the highest */
 }
 
 .koala {

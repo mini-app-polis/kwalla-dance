@@ -9,7 +9,7 @@ interface Props {
 
 const {
   title = site.name,
-  description = "West Coast Swing private lessons, event coaching, and video review in Minneapolis.",
+  description = `West Coast Swing private lessons, event coaching, and video review — based in ${site.home}, ${site.reach}.`,
 } = Astro.props;
 
 const origin = import.meta.env.PUBLIC_SITE_URL ?? site.url;
