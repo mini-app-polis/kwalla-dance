@@ -5,13 +5,16 @@
  * file she needs to open. Nothing else in src/ contains copy.
  */
 
-export type SessionType = {
-  id: string;
+export type FindLink = {
+  /** Picks the icon in FindMe.astro. Add a new id there before using it here. */
+  id: "facebook" | "instagram" | "youtube";
   name: string;
+  /** The handle as it reads on that platform, shown under the name. */
+  handle: string;
   blurb: string;
-  /** Display price, e.g. "$95". Empty string = only duration is shown. */
-  price: string;
-  duration: string;
+  href: string;
+  /** Text of the link out, e.g. "Follow on Instagram". */
+  cta: string;
 };
 
 export type SeedEvent = {
@@ -54,9 +57,11 @@ export const site = {
   // TODO: real contact address, or delete and rely on the booking link.
   email: "hello@kristenwallace.com",
 
+  /** Footer links. Kept in sync with `findMe` below by hand — it is four lines. */
   social: [
-    // TODO: fill in or delete. Empty array renders nothing.
-    // { label: "Instagram", href: "https://instagram.com/..." },
+    { label: "Facebook", href: "https://www.facebook.com/kristen.wallace.771/" },
+    { label: "Instagram", href: "https://www.instagram.com/kwalla.bear/" },
+    { label: "YouTube", href: "https://www.youtube.com/@kwalla" },
   ] as { label: string; href: string }[],
 
   /** All lesson booking happens here — the site never manages availability. */
@@ -98,30 +103,49 @@ export const site = {
     },
   ] satisfies GalleryImage[],
 
-  sessions: [
+  /**
+   * Where to find Kristen. Three is the right number — one per platform she
+   * actually posts on. Adding a fourth card breaks the row on desktop.
+   */
+  findMe: [
     {
-      id: "private-60",
-      name: "Private lesson",
-      // TODO: confirm blurb and whether couples are priced differently.
-      blurb: "60 minutes, one-on-one or as a couple.",
-      price: "", // TODO: e.g. "$95" — empty shows duration only
-      duration: "60 min",
+      id: "facebook",
+      name: "Facebook",
+      handle: "Kristen Wallace",
+      blurb: "Event announcements, weekend plans, and where the dancing is.",
+      href: "https://www.facebook.com/kristen.wallace.771/",
+      cta: "Find me on Facebook",
     },
     {
-      id: "tuneup-30",
-      name: "Tune-up",
-      blurb: "30 minutes on one thing — a pattern, a habit, a routine section.",
-      price: "", // TODO
-      duration: "30 min",
+      id: "instagram",
+      name: "Instagram",
+      handle: "@kwalla.bear",
+      blurb: "Clips from the floor, day to day, and the occasional koala.",
+      href: "https://www.instagram.com/kwalla.bear/",
+      cta: "Follow on Instagram",
     },
     {
-      id: "video-review",
-      name: "Video review",
-      blurb: "Send a comp video, get it back marked up with notes and drills.",
-      price: "", // TODO
-      duration: "Remote",
+      id: "youtube",
+      name: "YouTube",
+      handle: "@kwalla",
+      blurb: "Full routines and comp footage, start to finish.",
+      href: "https://www.youtube.com/@kwalla",
+      cta: "Watch on YouTube",
     },
-  ] satisfies SessionType[],
+  ] satisfies FindLink[],
+
+  /**
+   * The highlights playlist, embedded on the page. `playlistId` is the value
+   * after `list=` in the YouTube URL — everything else is derived from it,
+   * so swapping playlists is a one-line change.
+   */
+  highlights: {
+    heading: "Highlights",
+    blurb:
+      "A running playlist of routines and competition footage. It plays here, " +
+      "or opens on YouTube if you would rather have it full screen.",
+    playlistId: "PLF3UGw0Z2hSkV8Gbj1bwfFQB3r-bQug0b",
+  },
 
   /**
    * Hand-written entries, merged with whatever comes off the Google Calendar.

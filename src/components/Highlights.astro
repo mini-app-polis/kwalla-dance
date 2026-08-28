@@ -1,0 +1,43 @@
+---
+import { site } from "../data/site";
+
+/**
+ * The highlights playlist, embedded.
+ *
+ * youtube-nocookie.com is deliberate: it defers YouTube's tracking cookies
+ * until someone actually presses play. The iframe is lazy-loaded, so the
+ * player costs nothing until it scrolls into view.
+ */
+const { heading, blurb, playlistId } = site.highlights;
+
+const embedSrc = `https://www.youtube-nocookie.com/embed/videoseries?list=${playlistId}`;
+const watchUrl = `https://www.youtube.com/playlist?list=${playlistId}`;
+---
+
+<section id="highlights" class="scroll-mt-20 border-t border-line">
+  <div class="mx-auto max-w-5xl px-6 py-14 sm:px-8">
+    <p class="eyebrow mb-4">{heading}</p>
+    <p class="mb-8 max-w-prose text-lede text-muted">{blurb}</p>
+
+    <div class="aspect-video overflow-hidden rounded border border-line bg-surface">
+      <iframe
+        src={embedSrc}
+        title={`${site.name} — highlights playlist`}
+        class="h-full w-full"
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <a
+      href={watchUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-5 inline-block text-[13px] font-medium text-ink underline decoration-rule underline-offset-4 transition-colors hover:text-clay"
+    >
+      Open the full playlist on YouTube
+    </a>
+  </div>
+</section>

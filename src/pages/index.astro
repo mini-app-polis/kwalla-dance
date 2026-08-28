@@ -2,18 +2,20 @@
 import Base from "../layouts/Base.astro";
 import Nav from "../components/Nav.astro";
 import Hero from "../components/Hero.astro";
-import Lessons from "../components/Lessons.astro";
+import FindMe from "../components/FindMe.astro";
 import Calendar from "../components/Calendar.astro";
 import About from "../components/About.astro";
 import Gallery from "../components/Gallery.astro";
+import Highlights from "../components/Highlights.astro";
 import Booking from "../components/Booking.astro";
 import Footer from "../components/Footer.astro";
 
 /**
- * One page, six sections, anchor navigation.
+ * One page, seven sections, anchor navigation.
  *
- * Section order is a funnel, not a menu: who she is, what you can book, when
- * she is around, why her, proof she can dance, then the booking link.
+ * Section order is a funnel, not a menu: who she is, where to follow her,
+ * when she is around, why her, proof she can dance, the highlights reel,
+ * then the booking link.
  * Reordering these changes what the page argues, so do it deliberately.
  */
 ---
@@ -22,10 +24,11 @@ import Footer from "../components/Footer.astro";
   <Nav />
   <main>
     <Hero />
-    <Lessons />
+    <FindMe />
     <Calendar />
     <About />
     <Gallery />
+    <Highlights />
     <Booking />
   </main>
   <Footer />

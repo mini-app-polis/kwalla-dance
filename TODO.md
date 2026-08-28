@@ -60,8 +60,10 @@ option in the code as well.
 - [ ] Connect the Google account so Calendly reads her real availability.
       Point it at her *personal* calendar for conflict checking, not the
       public "Where I'll be" calendar — those are two different jobs.
-- [ ] Create event types matching the sessions in `site.ts`: `private-60`,
-      `tuneup-30`, `video-review`.
+- [ ] Create her event types in Calendly. The site no longer lists session
+      types of its own — that band is "Where to find me" now — so Calendly's
+      own landing page is the only place they are described. Whatever she
+      names them there is what people read.
 - [ ] Confirm `bookingUrl` in `site.ts` (currently
       `https://calendly.com/kwallawcs/`) is the right landing page — a bare
       profile URL shows all event types, which is probably what we want.
