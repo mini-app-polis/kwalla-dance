@@ -8,8 +8,17 @@ interface Props {
 }
 
 const {
-  title = site.name,
-  description = `West Coast Swing private lessons, event coaching, and video review — based in ${site.home}, ${site.reach}.`,
+  /**
+   * The <title> is not the H1. The H1 is her name, because that is what the
+   * page is; the title has to win a search nobody starts by knowing her name,
+   * so it carries the discipline and the city.
+   */
+  title = `${site.name} — West Coast Swing Lessons in ${site.home}`,
+  // Lower-cases only the first letter of each service, so the list reads as
+  // prose mid-sentence without flattening "DJing" into "djing".
+  description = `West Coast Swing — ${site.services
+    .map((s) => s.charAt(0).toLowerCase() + s.slice(1))
+    .join(", ")}. Based in ${site.home}, ${site.reach}.`,
 } = Astro.props;
 
 const origin = import.meta.env.PUBLIC_SITE_URL ?? site.url;
@@ -22,6 +31,66 @@ const ogImage = new URL("/og/default.png", origin).href;
 // were held constant across the palette studies as a control, not chosen for
 // this brief. Worth a real pass before launch — swap here and in
 // tailwind.config.mjs together.
+/**
+ * Structured data. One JSON-LD graph, three nodes: who she is, what she sells,
+ * and the site itself.
+ *
+ * `sameAs` is the part that earns its keep. It is how a search or answer
+ * engine works out that this site, the Facebook profile, the Instagram handle
+ * and the YouTube channel are one person rather than four strangers who share
+ * a name — so it is generated from site.social and stays correct as long as
+ * that array does.
+ *
+ * Everything here restates something a human can read on the page. Nothing is
+ * asserted that the page does not also say.
+ */
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${site.url}/#kristen`,
+      name: site.name,
+      jobTitle: "West Coast Swing instructor",
+      description: site.lede,
+      url: `${site.url}/`,
+      image: `${site.url}${site.about.photo}`,
+      homeLocation: {
+        "@type": "Place",
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Austin",
+          addressRegion: "TX",
+          addressCountry: "US",
+        },
+      },
+      knowsAbout: ["West Coast Swing", "partner dancing", ...site.services],
+      sameAs: site.social.map((s) => s.href),
+    },
+    {
+      "@type": "Service",
+      "@id": `${site.url}/#lessons`,
+      name: "West Coast Swing instruction, judging and DJing",
+      description: site.services.join(", ") + ".",
+      serviceType: site.services,
+      provider: { "@id": `${site.url}/#kristen` },
+      areaServed: [
+        { "@type": "City", name: "Austin" },
+        { "@type": "Country", name: "United States" },
+      ],
+      url: site.bookingUrl,
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${site.url}/#website`,
+      url: `${site.url}/`,
+      name: site.name,
+      inLanguage: "en-US",
+      publisher: { "@id": `${site.url}/#kristen` },
+    },
+  ],
+};
+
 const fontsUrl =
   "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap";
 ---
@@ -52,7 +121,8 @@ const fontsUrl =
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href={fontsUrl} rel="stylesheet" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  </head>
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+</head>
 
   <body class="bg-paper text-ink">
     <a

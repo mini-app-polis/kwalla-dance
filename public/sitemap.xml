@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Hand-written on purpose. One page, one URL — @astrojs/sitemap would be a
+  build dependency to generate four lines. If this site ever grows a second
+  page, delete this file and install that integration instead of maintaining
+  the list by hand.
+
+  No <lastmod>: a hardcoded date goes stale the moment someone edits the page,
+  and a wrong date is worse than none.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://kristenwallace.com/</loc>
+  </url>
+</urlset>
