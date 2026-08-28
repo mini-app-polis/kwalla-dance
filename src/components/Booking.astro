@@ -4,6 +4,10 @@ import { site } from "../data/site";
 /**
  * Booking is a link out to Calendly, not an embed. The site never manages
  * availability — Calendly owns the calendar, confirmations, and reminders.
+ *
+ * There is deliberately no email address anywhere on this site. Questions go
+ * through the social accounts in "Where to find me", which is what the second
+ * link points at.
  */
 ---
 
@@ -28,8 +32,8 @@ import { site } from "../data/site";
       >
         Book on Calendly
       </a>
-      <a href={`mailto:${site.email}`} class="link-quiet">
-        Or email me with questions
+      <a href="#find" class="link-quiet">
+        Or send me a message first
       </a>
     </div>
   </div>

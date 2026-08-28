@@ -67,9 +67,6 @@ export const site = {
   // TODO: confirm domain. Nothing depends on this except canonical/OG tags.
   url: "https://kristenwallace.com",
 
-  // TODO: real contact address, or delete and rely on the booking link.
-  email: "hello@kristenwallace.com",
-
   /** Footer links. Kept in sync with `findMe` below by hand — it is four lines. */
   social: [
     { label: "Facebook", href: "https://www.facebook.com/kristen.wallace.771/" },
