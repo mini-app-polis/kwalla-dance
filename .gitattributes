@@ -1,0 +1,5 @@
+# Lockfiles must never be three-way merged. Two Dependabot branches adding the
+# same transitive package produce two identical entries in the merged result,
+# which then will not parse. `-merge` makes git stop and hand you the conflict
+# instead of silently producing a broken lockfile; regenerate with `npm install`.
+package-lock.json -merge
