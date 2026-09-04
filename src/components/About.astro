@@ -4,7 +4,7 @@ import { site } from "../data/site";
 
 <section id="about" class="scroll-mt-20 border-y border-line bg-surface">
   <div class="mx-auto grid max-w-5xl items-start gap-10 px-6 py-14 sm:px-8 md:grid-cols-[.85fr_1.15fr]">
-    <div class="aspect-[4/5] overflow-hidden rounded bg-paper">
+    <div class="aspect-[4/5] overflow-hidden rounded-sm bg-paper">
       <img
         src={site.about.photo}
         alt={site.about.photoAlt}
@@ -16,7 +16,7 @@ import { site } from "../data/site";
 
     <div>
       <h2 class="eyebrow mb-5">{site.about.heading}</h2>
-      <div class="max-w-prose space-y-4">
+      <div class="max-w-copy space-y-4">
         {site.about.paragraphs.map((p) => (
           <p class="text-[14.5px] leading-relaxed text-muted">{p}</p>
         ))}

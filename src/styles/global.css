@@ -1,10 +1,82 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* Meadow — kristenwallace.com
-   Light-only. No dark mode: the palette is built around a paper base and
-   the value relationships do not survive inversion. */
+/* Meadow — palette tokens for kristenwallace.com
+   Ported from tailwind.config.mjs when Tailwind moved to v4, where the theme
+   is CSS custom properties rather than a JS config. Namespace decides the
+   utility: --color-* feeds bg-/text-/border-/fill-, --font-* feeds font-,
+   --text-* feeds text- sizes, --container-* feeds max-w-, --shadow-* feeds
+   shadow-.
+
+   Contrast verified against WCAG 2.1 AA (4.5:1 for body text):
+     ink   on paper ........ 11.19:1  AAA
+     muted on paper .........  5.11:1  AA
+     sage.ink on sage .......  5.23:1  AA
+     clay.ink on clay .......  5.43:1  AA
+     clay  on paper (link) ..  4.62:1  AA
+
+   Do not lighten `sage` past #627358 — below that it stops carrying body
+   text at AA, and it starts reading as a wellness template rather than an
+   editorial field. Do not lighten `clay` past #A6522F; the earlier value
+   (#B8674A) failed at 4.14:1 on white.
+
+   NOTE: typography is provisional. Bricolage/Instrument were held constant
+   across the palette studies as a control, not chosen for this brief. */
+
+@theme {
+  --color-paper: #f5f3ea;
+  --color-surface: #e9e7db;
+  --color-card: #ffffff;
+  --color-ink: #2f362e;
+  --color-muted: #5f675c;
+
+  --color-sage: #5a6a51;
+  --color-sage-ink: #f5f3ea;
+  --color-sage-muted: #c3ccbb;
+
+  --color-clay: #a6522f;
+  --color-clay-ink: #ffffff;
+
+  /* v4 renamed the radius scale down one step: v3's bare `rounded` is v4's
+     `rounded-sm`. The source was migrated to match, so this is the same 3px
+     the v3 config set as borderRadius.DEFAULT — verified in the built CSS,
+     because v4 leaves bare `rounded` hardcoded at 0.25rem and would have
+     silently rounded every card, button and image a millimetre softer.
+     Sage plus pill buttons plus soft shadows reads as a wellness template;
+     keeping corners tight is what prevents that. */
+  --radius-sm: 3px;
+
+  --color-line: rgba(47, 54, 46, 0.16);
+  --color-rule: rgba(47, 54, 46, 0.28);
+  --color-chip: rgba(47, 54, 46, 0.07);
+
+  /* --font-sans is what Preflight hands the body, so this is the line that
+     makes Instrument Sans the page font. Nothing applies font-sans directly. */
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --text-eyebrow: 0.656rem;
+  --text-eyebrow--line-height: 1;
+  --text-eyebrow--letter-spacing: 0.18em;
+
+  --text-lede: 0.906rem;
+  --text-lede--line-height: 1.65;
+
+  --text-hero: clamp(2.375rem, 5.6vw, 3.875rem);
+  --text-hero--line-height: 0.95;
+  --text-hero--letter-spacing: -0.035em;
+
+  /* Deliberately minimal. Meadow separates surfaces with value and hairline
+     rules, not elevation. Currently unused; kept as the sanctioned value if
+     elevation is ever needed. */
+  --shadow-hair: 0 1px 0 rgba(47, 54, 46, 0.08);
+
+  --container-lede: 34ch;
+  --container-copy: 64ch;
+}
+
+/* Light-only. No dark mode: the palette is built around a paper base and
+   the value relationships do not survive inversion. Hence no dark variant
+   is declared — there are no `dark:` utilities anywhere in src/. */
 
 html {
   color-scheme: light;
@@ -51,7 +123,7 @@ body {
 /* Components -------------------------------------------------------- */
 
 .btn {
-  @apply inline-block rounded bg-clay px-6 py-3 text-sm font-semibold
+  @apply inline-block rounded-sm bg-clay px-6 py-3 text-sm font-semibold
          text-clay-ink no-underline transition;
 }
 
@@ -77,7 +149,7 @@ body {
 /* Accessibility ----------------------------------------------------- */
 
 :focus-visible {
-  outline: 2px solid theme("colors.clay.DEFAULT");
+  outline: 2px solid var(--color-clay);
   outline-offset: 3px;
 }
 
