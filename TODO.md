@@ -21,8 +21,12 @@ building — it builds and looks correct today with placeholders in place.
       permanent answer if she'd rather not link out.
 - [ ] **Booking section copy.** Worth saying what happens *after* booking:
       where lessons are, what to bring, whether to come with a partner.
-- [ ] **Domain.** `kristenwallace.com` is assumed in three places
-      (`site.ts`, `wrangler.toml`, `astro.config.mjs`).
+- [x] **Domain.** Settled: `kwalla.dance`, which is what Cloudflare Pages
+      actually serves. It was assumed to be `kristenwallace.com` in five
+      places — `site.ts`, `wrangler.toml`, `astro.config.mjs`,
+      `public/sitemap.xml` and the `Sitemap:` line in `public/robots.txt` —
+      so the live site was emitting a canonical, an og:url and a sitemap
+      reference pointing at a domain that does not resolve.
 
 ---
 

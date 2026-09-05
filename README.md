@@ -1,4 +1,4 @@
-# kristenwallace.com
+# kwalla.dance
 
 Single-page site for Kristen Wallace — West Coast Swing instruction, event
 coaching, and video review.

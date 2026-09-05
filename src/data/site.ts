@@ -77,7 +77,7 @@ export const site = {
     "on my Calendly; if a slot looks open, it's open.",
 
   // TODO: confirm domain. Nothing depends on this except canonical/OG tags.
-  url: "https://kristenwallace.com",
+  url: "https://kwalla.dance",
 
   /** Footer links. Kept in sync with `findMe` below by hand — it is four lines. */
   social: [

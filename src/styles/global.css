@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Meadow — palette tokens for kristenwallace.com
+/* Meadow — palette tokens for kwalla.dance
    Ported from tailwind.config.mjs when Tailwind moved to v4, where the theme
    is CSS custom properties rather than a JS config. Namespace decides the
    utility: --color-* feeds bg-/text-/border-/fill-, --font-* feeds font-,

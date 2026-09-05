@@ -3,7 +3,7 @@ compatibility_date = "2026-01-01"
 pages_build_output_dir = "dist"
 
 [vars]
-PUBLIC_SITE_URL = "https://kristenwallace.com"
+PUBLIC_SITE_URL = "https://kwalla.dance"
 
 # Public iCal address for the "Where I'll be" Google Calendar. Requires that
 # calendar's Access permissions to include "Make available to public" — if that

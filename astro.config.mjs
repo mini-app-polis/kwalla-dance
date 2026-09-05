@@ -19,7 +19,7 @@ import { defineConfig } from "astro/config";
 // Astro 5. @tailwindcss/vite is Tailwind 4's own first-party entry point and
 // carries no Astro peer at all.
 export default defineConfig({
-  site: "https://kristenwallace.com",
+  site: "https://kwalla.dance",
   output: "static",
   vite: {
     plugins: [tailwindcss()],

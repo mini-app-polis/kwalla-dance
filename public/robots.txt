@@ -57,4 +57,4 @@ Disallow: /
 User-agent: CCBot
 Disallow: /
 
-Sitemap: https://kristenwallace.com/sitemap.xml
+Sitemap: https://kwalla.dance/sitemap.xml
