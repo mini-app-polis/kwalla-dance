@@ -14,8 +14,6 @@
 name: Scheduled rebuild
 
 on:
-  schedule:
-    - cron: "0 11,23 * * *" # 06:00 and 18:00 America/Chicago (CST)
   workflow_dispatch:
 
 jobs:
