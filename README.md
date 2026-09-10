@@ -6,6 +6,7 @@ coaching, and video review.
 ## Running it
 
 ```bash
+cp .env.example .env
 npm install
 npm run dev      # http://localhost:4321
 npm run build
@@ -13,6 +14,11 @@ npm run preview
 ```
 
 Node 20+.
+
+`.env.example` is the whole configuration surface: the public iCal feed URL
+and the canonical site URL. Leave `PUBLIC_CALENDAR_ICS_URL` empty and both the
+build and the endpoint fall back to the seed events in `src/data/site.ts`,
+which is usually what you want while working on styling.
 
 `astro dev` does **not** serve `/api/calendar` — Pages Functions are not part
 of the Astro dev server. The page falls back to its build-time list, which is
