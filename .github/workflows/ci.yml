@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Delegates to the fleet's shared security workflow: gitleaks over full
+  # history, `npm audit` against the resolved dependency set, and semgrep.
+  # sbom: false because SEC-005 does not apply to a static site.
+  security:
+    uses: mini-app-polis/.github/.github/workflows/security.yml@v2
+    with:
+      language: typescript
+      package-manager: npm
+      sbom: false
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        env:
+          # Both are read through import.meta.env at build time and baked into
+          # the output. PUBLIC_CALENDAR_ICS_URL is what the "Where I'll be" list
+          # is built from — without it the site builds clean and ships empty.
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+          PUBLIC_CALENDAR_ICS_URL: ${{ vars.PUBLIC_CALENDAR_ICS_URL }}
+        run: npm run build
+
+  release:
+    needs: [test, security]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # VER-006. npx installs only the core package, so every plugin the
+      # .releaserc.json names is installed here rather than carried in
+      # package.json devDependencies.
+      - name: Install semantic-release plugins
+        run: |
+          npm install --no-save \
+            semantic-release \
+            @semantic-release/changelog \
+            @semantic-release/npm \
+            @semantic-release/git \
+            @semantic-release/github \
+            @semantic-release/commit-analyzer \
+            @semantic-release/release-notes-generator
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
