@@ -1,0 +1,93 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Delegates to the fleet's shared security workflow: gitleaks over full
+  # history, `npm audit` against the resolved dependency set, and semgrep.
+  # sbom: false because SEC-005 does not apply to a static site.
+  security:
+    uses: mini-app-polis/.github/.github/workflows/security.yml@v2
+    with:
+      language: typescript
+      package-manager: npm
+      sbom: false
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Deliberately no `env:` block. An unset repository variable
+      # interpolates to the empty string, not to nothing, and the site
+      # reads these with `??` — which falls back on null/undefined but
+      # not on "". Passing `${{ vars.PUBLIC_SITE_URL }}` when the
+      # variable does not exist therefore replaced a working default
+      # with "", and `new URL(path, "")` failed the whole build.
+      #
+      # This job proves the site compiles; Cloudflare Pages supplies the
+      # real values at deploy time. Leaving them unset here is what lets
+      # the in-code defaults apply.
+      - name: Build
+        run: npm run build
+
+  release:
+    needs: [test, security]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # VER-006. npx installs only the core package, so every plugin the
+      # .releaserc.json names is installed here rather than carried in
+      # package.json devDependencies.
+      - name: Install semantic-release plugins
+        run: |
+          npm install --no-save \
+            semantic-release \
+            @semantic-release/changelog \
+            @semantic-release/npm \
+            @semantic-release/git \
+            @semantic-release/github \
+            @semantic-release/commit-analyzer \
+            @semantic-release/release-notes-generator
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
