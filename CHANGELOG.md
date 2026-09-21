@@ -1,3 +1,11 @@
+## [1.0.2](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.1...v1.0.2) (2026-09-21)
+
+
+### Bug Fixes
+
+* **deps:** bump astro in the js-minor-and-patch group ([f039c58](https://github.com/mini-app-polis/kwalla-dance/commit/f039c580ba448ed8723fd8304a2741c328b09523))
+* **deps:** bump astro in the js-minor-and-patch group ([20bf669](https://github.com/mini-app-polis/kwalla-dance/commit/20bf669ffaf488974a35c053e49f0450049eaff8))
+
 ## [1.0.1](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.0...v1.0.1) (2026-09-13)
 
 
