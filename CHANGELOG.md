@@ -1,3 +1,11 @@
+## [1.0.4](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.3...v1.0.4) (2026-10-03)
+
+
+### Bug Fixes
+
+* **deps:** patch devalue and fast-uri; time-box the http-cache-semantics advisory ([1ba764a](https://github.com/mini-app-polis/kwalla-dance/commit/1ba764a71f8d5539ef693d1cdcf86ab9b6977b26))
+* **release:** let Cloudflare Pages build the release commit ([3b81d86](https://github.com/mini-app-polis/kwalla-dance/commit/3b81d867064f2d66bc6340635c3a73538594d944))
+
 ## [1.0.3](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.2...v1.0.3) (2026-09-28)
 
 
