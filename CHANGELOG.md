@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.4...v1.0.5) (2026-10-08)
+
+
+### Bug Fixes
+
+* **deps:** bump sharp, source-map-js for security advisories ([f166cb6](https://github.com/mini-app-polis/kwalla-dance/commit/f166cb6d8008c1f51875765fd0e25d76f0c15c3b))
+
 ## [1.0.4](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.3...v1.0.4) (2026-10-03)
 
 
