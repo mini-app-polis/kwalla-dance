@@ -1,15 +1,14 @@
-# Scheduled rebuild.
+# Manual rebuild.
 #
-# The "Where I'll be" list is baked in at build time, so a new event on
-# Kristen's phone does not appear on the site until something triggers a
-# build. This pings a Cloudflare Pages deploy hook twice a day to close that
-# gap without her needing to do anything.
+# Calendar changes no longer need a rebuild — they arrive live through
+# /api/calendar — but the copy baked into the HTML at build time is the
+# fallback a no-JS visitor or a crawler sees. Running this by hand
+# (Actions → Scheduled rebuild → Run workflow) pings a Cloudflare Pages
+# deploy hook to refresh that copy. It used to run on a schedule; the cron
+# trigger has since been removed, so it runs only when started.
 #
 # Inert until the CLOUDFLARE_DEPLOY_HOOK secret exists — the step is guarded,
 # so a fork or a fresh clone will not produce failing red runs.
-#
-# Twice daily is deliberate. iCloud's public feeds are cached hard on Apple's
-# side, so polling more often mostly re-serves the same stale copy.
 
 name: Scheduled rebuild
 
