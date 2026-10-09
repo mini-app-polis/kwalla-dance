@@ -1,0 +1,96 @@
+name: site
+
+# Smoke-tests the site once Cloudflare Pages has deployed a push to dev or
+# main (CD-032). Pages builds on its own, outside Actions, and reports
+# through the "Cloudflare Pages" check on the commit; this waits for that
+# check and tests the deploy's own preview URL
+# (<hash>.kristenwallace-com.pages.dev) — exactly this commit's build, so a
+# cache can't pass a stale one. It makes sure the deploy:
+#   - serves the page, robots.txt and the sitemap it names;
+#   - answers /api/calendar, the Pages Function the page refreshes its
+#     calendar from, with the { status, events } shape the page reads. That
+#     function is compiled by Pages, never by CI, so this is the only place
+#     it runs before a visitor does.
+# All of it is read-only, so it is safe against production.
+#
+# The site calls no fleet API and has no identity provider, so there is no
+# environment's API or key to check. A "seed" status — the function could
+# not read Google and fell back to src/data/site.ts — is a warning, not a
+# failure: the page is correct either way, and Google's feed is not this
+# deploy's to break.
+#
+# It runs on pushes. Not on the promotion pull request to main: its head is
+# dev's latest commit, already tested by the push run, whose result the pull
+# request shows. semantic-release's own commit to main is marked
+# [skip actions], so a release is checked once, at the merge.
+# Modelled on deejaytools-com's site.yml.
+
+on:
+  push:
+    branches: [dev, main]
+
+permissions:
+  contents: read
+  checks: read
+
+concurrency:
+  group: site-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SHA: ${{ github.sha }}
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Wait for Cloudflare Pages to deploy this commit
+        id: deploy
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          check() {
+            gh api "repos/$GITHUB_REPOSITORY/commits/$SHA/check-runs?check_name=Cloudflare%20Pages" --jq "$1"
+          }
+          for _ in $(seq 1 60); do
+            read -r status conclusion <<<"$(check '.check_runs[0] // {} | "\(.status // "missing") \(.conclusion // "")"')"
+            if [ "$status" = completed ]; then
+              if [ "$conclusion" = success ]; then
+                # The check's summary lists the deploy's own preview URL
+                # (<8-hex-hash>.<project>.pages.dev) before the branch alias.
+                url=$(check '.check_runs[0].output.summary' | grep -oE 'https://[0-9a-f]{8}\.[a-z0-9-]+\.pages\.dev' | head -n 1 || true)
+                if [ -z "$url" ]; then echo "::error::The Cloudflare Pages check did not report a preview URL."; exit 1; fi
+                echo "Deployed at $url."
+                echo "site=$url" >> "$GITHUB_OUTPUT"
+                exit 0
+              fi
+              echo "::error::The Cloudflare Pages deploy of $SHA concluded '$conclusion'."
+              exit 1
+            fi
+            sleep 15
+          done
+          echo "::error::No finished Cloudflare Pages deploy for $SHA after 15 minutes."
+          exit 1
+
+      - name: Smoke-test the site
+        env:
+          SITE: ${{ steps.deploy.outputs.site }}
+        run: |
+          set -euo pipefail
+          fail() { echo "::error::$1"; exit 1; }
+          get() { curl -fsSL --retry 3 "$SITE$1"; }
+
+          get / >/dev/null || fail "$SITE/ did not load."
+          for path in /robots.txt /sitemap.xml; do
+            get "$path" >/dev/null || fail "$SITE$path did not load."
+          done
+
+          calendar=$(get /api/calendar) || fail "$SITE/api/calendar did not answer."
+          jq -e '(.events | type == "array") and (.status == "live" or .status == "seed")' <<<"$calendar" >/dev/null \
+            || fail "$SITE/api/calendar did not answer { status, events }: $(head -c 300 <<<"$calendar")"
+          status=$(jq -r .status <<<"$calendar")
+          if [ "$status" = seed ]; then
+            echo "::warning::/api/calendar fell back to the seed events — the Google feed was unreachable."
+          fi
+          echo "Site OK at $SITE (calendar: $status, $(jq '.events | length' <<<"$calendar") events)"

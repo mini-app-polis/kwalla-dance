@@ -111,7 +111,7 @@ output directory `dist`. Environment variables live in `wrangler.toml`.
 automatically and routes `/api/calendar` to it.
 
 Calendar changes no longer need a deploy at all; they arrive through the
-endpoint. The scheduled rebuild in `.github/workflows/rebuild.yml` now serves
-only to keep the *baked fallback* from drifting, so it runs once a day rather
-than twice. It stays inert until the repo secret `CLOUDFLARE_DEPLOY_HOOK`
-exists.
+endpoint. The rebuild in `.github/workflows/rebuild.yml` serves only to
+refresh the *baked fallback*, and runs only when started by hand — it no
+longer has a schedule. It stays inert until the repo secret
+`CLOUDFLARE_DEPLOY_HOOK` exists.
