@@ -13,7 +13,7 @@ npm run build
 npm run preview
 ```
 
-Node 20+.
+Node 22+ (`.nvmrc`).
 
 `.env.example` is the whole configuration surface: the public iCal feed URL
 and the canonical site URL. Leave `PUBLIC_CALENDAR_ICS_URL` empty and both the
@@ -41,8 +41,8 @@ functions/api/calendar.ts
                         Cloudflare Pages Function behind /api/calendar. The
                         live half.
 src/components/         One component per page section.
-src/styles/global.css   Base styles + the koala opacity scale.
-tailwind.config.mjs     The Meadow palette. Read the header comment before
+src/styles/global.css   Base styles, the koala opacity scale, and the Meadow
+                        palette (`@theme`). Read the header comment before
                         changing any colour.
 TODO.md                 Launch checklist.
 ```
@@ -93,7 +93,7 @@ is findable in the build log.
 go lighter than `#A6522F` without dropping below WCAG AA. Those values are
 also roughly where the palette starts looking like a stock wellness template,
 so the accessibility floor and the taste floor happen to coincide. Ratios are
-documented in the `tailwind.config.mjs` header.
+documented in the `src/styles/global.css` header.
 
 **Recurring events.** `src/lib/ics.ts` does not expand `RRULE`. Google emits a
 recurring event as a single VEVENT carrying a recurrence rule, so a weekly
