@@ -44,7 +44,7 @@ stage-lit comp footage, say so — the palette should switch to the darker
 variant rather than the photos being forced to work.
 
 - [ ] Re-tune koala opacities against the real photos. The hero value
-      (`--koala-hero: 0.06` in `global.css`) was set against a flat gradient
+      (`--koala-hero: 0.08` in `global.css`) was set against a flat gradient
       and will almost certainly need to change over a busy image.
 
 ---
@@ -138,7 +138,7 @@ announce an event weekend; do not promise her same-day accuracy.
 - [ ] Nothing to configure for `/functions` — Cloudflare Pages compiles it
       automatically and routes `/api/calendar` to it. Confirm the route
       answers on the first deploy.
-- [ ] Optional now: the daily rebuild. Calendar changes no longer need it —
+- [ ] Optional now: the manual rebuild. Calendar changes no longer need it —
       they arrive live — so it only keeps the baked fallback in the HTML from
       drifting. Cloudflare Pages → Settings → Builds & deployments → Deploy
       hooks → create one, then add the URL as a repo secret named
@@ -153,7 +153,8 @@ announce an event weekend; do not promise her same-day accuracy.
       was held constant across the palette studies as a control variable, not
       chosen for this brief. It's serviceable but slightly cold for someone
       whose whole ask was "something that fits my personality." Swap in
-      `tailwind.config.mjs` and `src/layouts/Base.astro` together.
+      the `@theme` block of `src/styles/global.css` and `src/layouts/Base.astro`
+      together.
 - [ ] Decide whether the About photo and hero photo should differ in crop or
       treatment. Currently identical 4:5 treatment, which is a bit flat.
 - [ ] Five koalas exist: four in the page, one in the favicon. Confirm that
