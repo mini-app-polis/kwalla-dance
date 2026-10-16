@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.6...v1.0.7) (2026-10-16)
+
+
+### Bug Fixes
+
+* **ci:** follow a newer branch deploy when Pages skips this commit's build ([d27d16d](https://github.com/mini-app-polis/kwalla-dance/commit/d27d16d8107c7bb7a8283d6639a5597b9cb05fe1))
+
 ## [1.0.6](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.5...v1.0.6) (2026-10-16)
 
 
