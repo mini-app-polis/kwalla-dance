@@ -1,3 +1,10 @@
+## [1.0.8](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.7...v1.0.8) (2026-10-19)
+
+
+### Bug Fixes
+
+* take Pages variables from the project instead of wrangler.toml (MINI-82) ([c92baf8](https://github.com/mini-app-polis/kwalla-dance/commit/c92baf8c035b430a7d70f1aaed5554cddbe4ca0e))
+
 ## [1.0.7](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.6...v1.0.7) (2026-10-16)
 
 
