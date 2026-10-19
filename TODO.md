@@ -85,7 +85,8 @@ option in the code as well.
 
 The source is a **Google Calendar**, not an iCloud one. Calendar ID
 `a9c43a7a…@group.calendar.google.com`. The ICS address is already wired into
-`PUBLIC_CALENDAR_ICS_URL` in `wrangler.toml` and `.env.example`:
+`PUBLIC_CALENDAR_ICS_URL` in Doppler (carried to the Pages project by
+mini-app-polis/infra) and `.env.example`:
 
 ```
 https://calendar.google.com/calendar/ical/<CALENDAR_ID>/public/basic.ics
