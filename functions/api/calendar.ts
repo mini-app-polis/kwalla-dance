@@ -23,7 +23,10 @@ import { site } from "../../src/data/site";
 import { buildEventList, normaliseUrl } from "../../src/lib/ics";
 
 type Env = {
-  /** Set in wrangler.toml [vars]. */
+  /**
+   * A Pages project variable, managed in mini-app-polis/infra
+   * (cloudflare_pages_sites.tf) from Doppler.
+   */
   PUBLIC_CALENDAR_ICS_URL?: string;
 };
 

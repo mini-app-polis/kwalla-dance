@@ -105,7 +105,9 @@ correctly is a genuinely hard problem and this site does not need it.
 ## Deploying
 
 Cloudflare Pages, connected to this repo. Build command `npm run build`,
-output directory `dist`. Environment variables live in `wrangler.toml`.
+output directory `dist`. Environment variables are Pages project variables,
+managed in mini-app-polis/infra (`cloudflare_pages_sites.tf`) from Doppler.
+They reach both the build and `/functions`.
 
 `/functions` needs no configuration — Cloudflare Pages compiles it
 automatically and routes `/api/calendar` to it.
