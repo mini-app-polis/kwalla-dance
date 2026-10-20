@@ -1,3 +1,10 @@
+## [1.0.9](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.8...v1.0.9) (2026-10-20)
+
+
+### Bug Fixes
+
+* keep placeholder copy off the live page ([2d45138](https://github.com/mini-app-polis/kwalla-dance/commit/2d45138b5a31331cf346cf6698cbe32ee3a04bc6))
+
 ## [1.0.8](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.7...v1.0.8) (2026-10-19)
 
 
