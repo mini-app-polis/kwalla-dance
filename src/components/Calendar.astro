@@ -22,9 +22,9 @@ const usingSeed = status !== "live";
 
   <div class="mb-2 flex items-baseline justify-between gap-4">
     <h2 class="text-eyebrow font-semibold uppercase text-muted">Where I'll be</h2>
-    <span class="text-[11.5px] text-muted opacity-75">
-      {usingSeed ? "TODO: connect calendar" : "Straight from my calendar"}
-    </span>
+    {!usingSeed && (
+      <span class="text-[11.5px] text-muted opacity-75">Straight from my calendar</span>
+    )}
   </div>
 
   <div data-calendar-list>

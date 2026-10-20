@@ -207,3 +207,12 @@ export const site = {
 };
 
 export type Site = typeof site;
+
+/**
+ * The About paragraphs that are real copy. Placeholders start with "TODO:"
+ * and never reach the page: the section and its nav link appear only once
+ * at least one real paragraph exists.
+ */
+export const aboutParagraphs = site.about.paragraphs.filter(
+  (p) => !p.startsWith("TODO"),
+);
