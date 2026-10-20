@@ -1,5 +1,5 @@
 ---
-import { site } from "../data/site";
+import { aboutParagraphs, site } from "../data/site";
 
 /**
  * Anchor nav for a single-page site. Sections are the whole site, so the
@@ -12,7 +12,7 @@ const sections = [
   { href: "#about", label: "About" },
   { href: "#highlights", label: "Highlights" },
   { href: "#book", label: "Book" },
-];
+].filter((s) => s.href !== "#about" || aboutParagraphs.length > 0);
 ---
 
 <header class="sticky top-0 z-40 border-b border-line bg-paper/85 backdrop-blur">
