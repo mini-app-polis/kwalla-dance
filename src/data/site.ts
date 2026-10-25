@@ -57,8 +57,6 @@ export const site = {
   reach,
   eyebrow: `West Coast Swing · ${home}`,
 
-  // TODO: replace with Kristen's own words. This is the single most important
-  // paragraph on the site and it should sound like her, not like a template.
   /**
    * What she does, in her own order. This is the single source for the tagline:
    * the hero paragraph reads it, and so do the meta description and the
@@ -76,7 +74,6 @@ export const site = {
     "in Austin and wherever the dancing takes me. Booking is one click away " +
     "on my Calendly; if a slot looks open, it's open.",
 
-  // TODO: confirm domain. Nothing depends on this except canonical/OG tags.
   url: "https://kwalla.dance",
 
   /** Footer links. Kept in sync with `findMe` below by hand — it is four lines. */
