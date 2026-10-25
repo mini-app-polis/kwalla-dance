@@ -1,3 +1,82 @@
+## [1.0.11](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.10...v1.0.11) (2026-10-25)
+
+
+### Bug Fixes
+
+* **deps:** bump astro from 7.3.8 to 7.4.0 in the minor-and-patch group ([79e855b](https://github.com/mini-app-polis/kwalla-dance/commit/79e855ba31f01c6166b70c97552d9444154085e9))
+
+## [1.0.10](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.9...v1.0.10) (2026-10-24)
+
+
+### Bug Fixes
+
+* **deps:** patch zod, http-cache-semantics, fast-uri and undici ([9bb1ad1](https://github.com/mini-app-polis/kwalla-dance/commit/9bb1ad103186c44848ee1540c6f3f12cfa098511))
+
+## [1.0.9](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.8...v1.0.9) (2026-10-20)
+
+
+### Bug Fixes
+
+* keep placeholder copy off the live page ([2d45138](https://github.com/mini-app-polis/kwalla-dance/commit/2d45138b5a31331cf346cf6698cbe32ee3a04bc6))
+
+## [1.0.8](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.7...v1.0.8) (2026-10-19)
+
+
+### Bug Fixes
+
+* take Pages variables from the project instead of wrangler.toml (MINI-82) ([c92baf8](https://github.com/mini-app-polis/kwalla-dance/commit/c92baf8c035b430a7d70f1aaed5554cddbe4ca0e))
+
+## [1.0.7](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.6...v1.0.7) (2026-10-16)
+
+
+### Bug Fixes
+
+* **ci:** follow a newer branch deploy when Pages skips this commit's build ([d27d16d](https://github.com/mini-app-polis/kwalla-dance/commit/d27d16d8107c7bb7a8283d6639a5597b9cb05fe1))
+
+## [1.0.6](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.5...v1.0.6) (2026-10-16)
+
+
+### Bug Fixes
+
+* **deps:** bump astro from 7.3.5 to 7.3.8 in the minor-and-patch group ([be458c2](https://github.com/mini-app-polis/kwalla-dance/commit/be458c2865742b2f54befa48e8166f19ba84608c))
+
+## [1.0.5](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.4...v1.0.5) (2026-10-08)
+
+
+### Bug Fixes
+
+* **deps:** bump sharp, source-map-js for security advisories ([f166cb6](https://github.com/mini-app-polis/kwalla-dance/commit/f166cb6d8008c1f51875765fd0e25d76f0c15c3b))
+
+## [1.0.4](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.3...v1.0.4) (2026-10-03)
+
+
+### Bug Fixes
+
+* **deps:** patch devalue and fast-uri; time-box the http-cache-semantics advisory ([1ba764a](https://github.com/mini-app-polis/kwalla-dance/commit/1ba764a71f8d5539ef693d1cdcf86ab9b6977b26))
+* **release:** let Cloudflare Pages build the release commit ([3b81d86](https://github.com/mini-app-polis/kwalla-dance/commit/3b81d867064f2d66bc6340635c3a73538594d944))
+
+## [1.0.3](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.2...v1.0.3) (2026-09-28)
+
+
+### Bug Fixes
+
+* **deps:** bump astro in the js-minor-and-patch group ([1213c5a](https://github.com/mini-app-polis/kwalla-dance/commit/1213c5a697e6478c6225c1f5a2899dc661655c3d))
+
+## [1.0.2](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.1...v1.0.2) (2026-09-21)
+
+
+### Bug Fixes
+
+* **deps:** bump astro in the js-minor-and-patch group ([f039c58](https://github.com/mini-app-polis/kwalla-dance/commit/f039c580ba448ed8723fd8304a2741c328b09523))
+* **deps:** bump astro in the js-minor-and-patch group ([20bf669](https://github.com/mini-app-polis/kwalla-dance/commit/20bf669ffaf488974a35c053e49f0450049eaff8))
+
+## [1.0.1](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.0...v1.0.1) (2026-09-13)
+
+
+### Bug Fixes
+
+* **deps:** pin astro and @astrojs/check to exact versions ([e103f36](https://github.com/mini-app-polis/kwalla-dance/commit/e103f3647f4aaa3fb24b4fdd9b8a8e786b7625a6))
+
 # 1.0.0 (2026-09-10)
 
 
