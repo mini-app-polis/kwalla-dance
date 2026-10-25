@@ -1,3 +1,10 @@
+## [1.0.11](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.10...v1.0.11) (2026-10-25)
+
+
+### Bug Fixes
+
+* **deps:** bump astro from 7.3.8 to 7.4.0 in the minor-and-patch group ([79e855b](https://github.com/mini-app-polis/kwalla-dance/commit/79e855ba31f01c6166b70c97552d9444154085e9))
+
 ## [1.0.10](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.9...v1.0.10) (2026-10-24)
 
 
