@@ -58,7 +58,7 @@ export async function getUpcomingEvents(
         icsText = await res.text();
       } else if (res.status === 404) {
         // Google's 404 here almost always means the calendar's Access
-        // permissions no longer include "Make available to public", not that
+        // permissions do not include "Make available to public", not that
         // the URL is wrong. Say so, because the two look identical otherwise.
         console.warn(
           "[calendar] Google returned 404 — the calendar is probably no longer " +
