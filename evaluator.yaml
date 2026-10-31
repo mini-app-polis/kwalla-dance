@@ -6,11 +6,8 @@ type: static-site
 traits:
   - cloudflare-pages
   # Deployed via Cloudflare Pages Git integration (auto-deploy on push to main).
-  # No ci.yml required — Cloudflare Pages is the CI/CD pipeline.
-  # Automatically excepts VER-003, VER-005, VER-006.
-  # A ci.yml is carried anyway, matching website-astro-wcs and
-  # website-astro-software: the trait removes the obligation, not the value
-  # of building and scanning the site before it reaches Cloudflare.
+  # The trait records how the site ships; it exempts no rules. ci.yml builds
+  # and scans the site before it reaches Cloudflare.
 
 exemptions:
   - rule: CD-002
