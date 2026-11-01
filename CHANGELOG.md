@@ -1,3 +1,10 @@
+## [1.0.13](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.12...v1.0.13) (2026-11-01)
+
+
+### Bug Fixes
+
+* **deps:** bump the minor-and-patch group with 2 updates ([ba8ae73](https://github.com/mini-app-polis/kwalla-dance/commit/ba8ae73279f6e7cf66040219c9fb93d17be449c5))
+
 ## [1.0.12](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.11...v1.0.12) (2026-11-01)
 
 
