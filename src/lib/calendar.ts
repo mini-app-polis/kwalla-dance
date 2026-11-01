@@ -26,6 +26,7 @@
 
 import { site } from "../data/site";
 import { buildEventList, normaliseUrl, type DisplayEvent } from "./ics";
+import { logger } from "./logger";
 
 export type { CalendarEvent, DisplayEvent } from "./ics";
 export { formatDateRange } from "./ics";
@@ -60,24 +61,42 @@ export async function getUpcomingEvents(
         // Google's 404 here almost always means the calendar's Access
         // permissions do not include "Make available to public", not that
         // the URL is wrong. Say so, because the two look identical otherwise.
-        console.warn(
-          "[calendar] Google returned 404 — the calendar is probably no longer " +
-            "public. Using seed events.",
-        );
+        logger.warn({
+          event: "calendar_feed_not_public",
+          category: "data",
+          context: {
+            status: 404,
+            message:
+              "Google returned 404 — the calendar is probably not public. Using seed events.",
+          },
+        });
       } else {
-        console.warn(`[calendar] feed returned ${res.status}; using seed events`);
+        logger.warn({
+          event: "calendar_feed_failed",
+          category: "data",
+          context: { status: res.status, message: "Using seed events." },
+        });
       }
     } catch (err) {
-      console.warn("[calendar] fetch failed; using seed events:", err);
+      logger.warn({
+        event: "calendar_fetch_failed",
+        category: "data",
+        context: { message: "Using seed events." },
+        error: err,
+      });
     }
   } else {
     // The single most common local symptom is a page full of seed events with
     // no explanation. Astro reads .env, never .env.example, so a fresh clone
     // has no feed URL at all until someone copies one across.
-    console.warn(
-      "[calendar] PUBLIC_CALENDAR_ICS_URL is not set — copy .env.example to " +
-        ".env for local dev. Using seed events.",
-    );
+    logger.warn({
+      event: "calendar_feed_url_missing",
+      category: "infra",
+      context: {
+        message:
+          "PUBLIC_CALENDAR_ICS_URL is not set — copy .env.example to .env for local dev. Using seed events.",
+      },
+    });
   }
 
   return {

@@ -140,6 +140,9 @@ function inferTag(summary: string): string {
   return "Attending";
 }
 
+/**
+ * Parses an iCalendar (ICS) feed into its VEVENT entries as CalendarEvents.
+ */
 export function parseIcs(raw: string): CalendarEvent[] {
   const lines = unfold(raw);
   const events: CalendarEvent[] = [];
