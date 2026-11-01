@@ -1,3 +1,10 @@
+## [1.0.12](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.11...v1.0.12) (2026-11-01)
+
+
+### Bug Fixes
+
+* **calendar:** log feed fallbacks through a structured logger ([67fe9b5](https://github.com/mini-app-polis/kwalla-dance/commit/67fe9b5bc8c25636b8dcbc1d49026589e3379264))
+
 ## [1.0.11](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.10...v1.0.11) (2026-10-25)
 
 
