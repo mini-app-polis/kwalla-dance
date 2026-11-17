@@ -1,3 +1,10 @@
+## [1.0.16](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.15...v1.0.16) (2026-11-17)
+
+
+### Bug Fixes
+
+* **security:** except picomatch GHSA-fc5q-39xc-vjpf and drop the cleared http-cache-semantics entry ([7775a8a](https://github.com/mini-app-polis/kwalla-dance/commit/7775a8a08376b9aa1e3a30764b6ed8ceeb7f78e7))
+
 ## [1.0.15](https://github.com/mini-app-polis/kwalla-dance/compare/v1.0.14...v1.0.15) (2026-11-16)
 
 
